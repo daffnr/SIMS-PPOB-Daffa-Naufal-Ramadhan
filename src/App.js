@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import TransactionPage from './pages/TransactionPage';
 import TopUpPage from './pages/TopUpPage';
+import PaymentPage from './pages/PaymentPage';
 
 function App() {
   const { isLoggedIn } = useSelector((state) => state.auth);
@@ -41,6 +42,10 @@ function App() {
         <Route 
           path="/topup" 
           element={isLoggedIn ? <TopUpPage /> : <Navigate to="/login" replace />} 
+        />
+        <Route 
+          path="/payment" 
+          element={isLoggedIn ? <PaymentPage /> : <Navigate to="/login" replace />} 
         />
       </Routes>
     </div>

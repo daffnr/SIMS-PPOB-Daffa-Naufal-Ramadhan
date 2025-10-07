@@ -107,7 +107,7 @@ const Dashboard = () => {
   }, [dispatch]);
   
   const handleServiceClick = (service) => {
-    // Navigate to service detail or payment page
+    navigate('/payment', { state: { service } });
   };
   
   const handleBannerClick = (banner) => {
