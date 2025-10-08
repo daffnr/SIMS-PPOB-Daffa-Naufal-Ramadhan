@@ -14,27 +14,49 @@
 src/
 ├── components/
 │   ├── atoms/
+│   │   ├── Avatar/
+│   │   ├── BalanceCard/
+│   │   ├── BannerCard/
 │   │   ├── Button/
+│   │   ├── DefaultAvatar/
 │   │   ├── Input/
+│   │   ├── LoginButton/
+│   │   ├── LoginLink/
+│   │   ├── LoginPageTitle/
 │   │   ├── Logo/
 │   │   ├── PageTitle/
-│   │   └── LoginLink/
+│   │   ├── RegisterLink/
+│   │   └── ServiceCard/
 │   ├── molecules/
-│   │   └── FormField/
+│   │   ├── BannerSlider/
+│   │   ├── FormField/
+│   │   └── ServiceGrid/
 │   ├── organisms/
+│   │   ├── Dashboard/
+│   │   ├── LoginForm/
 │   │   └── RegisterForm/
 │   └── templates/
+│       ├── LoginLayout/
 │       └── RegisterLayout/
 ├── features/
-│   └── auth/
-│       └── authSlice.js
+│   ├── auth/
+│   │   └── authSlice.js
+│   └── dashboard/
+│       └── dashboardSlice.js
 ├── pages/
-│   └── RegisterPage.js
+│   ├── HomePage.js
+│   ├── LoginPage.js
+│   ├── PaymentPage.js
+│   ├── ProfilePage.js
+│   ├── RegisterPage.js
+│   ├── TopUpPage.js
+│   └── TransactionPage.js
 ├── services/
 │   └── api.js
 ├── store/
 │   └── store.js
 ├── App.js
+├── index.css
 └── index.js
 ```
 
