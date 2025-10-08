@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getProfile, getBalance, getServices, getBanners } from '../../services/api';
+import { getProfile, getBalance, getServices } from '../../services/api';
+import { localBanners } from '../../data/localBanners';
 
 // Async thunks untuk dashboard data
 export const fetchProfileAsync = createAsyncThunk(
@@ -63,17 +64,10 @@ export const fetchBannersAsync = createAsyncThunk(
   'dashboard/fetchBanners',
   async (_, { getState, rejectWithValue }) => {
     try {
-      const state = getState();
-      const token = state.auth.user?.token || localStorage.getItem('token');
-      
-      if (!token || !state.auth.isLoggedIn) {
-        throw new Error('No authentication token found or user not logged in');
-      }
-      
-      const response = await getBanners(token);
-      return response;
+      // Use local banners instead of API call
+      return { data: localBanners };
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch banners');
+      return rejectWithValue(error.message || 'Failed to load banners');
     }
   }
 );

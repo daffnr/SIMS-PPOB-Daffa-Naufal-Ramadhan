@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Icon } from '@iconify/react';
 
 const InputContainer = styled.div`
   position: relative;
@@ -93,7 +94,11 @@ const Input = ({
         />
         {showPasswordToggle && (
           <PasswordToggle onClick={onTogglePassword} type="button">
-            {isPasswordVisible ? '👁️' : '👁️‍🗨️'}
+            <Icon 
+              icon={isPasswordVisible ? 'mdi:eye-off' : 'mdi:eye'} 
+              width="20" 
+              height="20"
+            />
           </PasswordToggle>
         )}
       </InputWrapper>

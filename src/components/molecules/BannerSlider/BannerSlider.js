@@ -26,8 +26,9 @@ const SliderTrack = styled.div`
 `;
 
 const BannerSlide = styled.div`
-  min-width: 300px;
-  margin-right: 16px;
+  min-width: 320px;
+  min-height: 200px;
+  margin-right: 12px;
 `;
 
 const NavigationButton = styled.button`
@@ -135,7 +136,7 @@ const BannerSlider = ({ banners = [], onBannerClick }) => {
             </NextButton>
           </>
         )}
-        <SliderTrack translateX={-currentIndex * 316}>
+        <SliderTrack translateX={-currentIndex * 336}>
           {banners.map((banner, index) => (
             <BannerSlide key={index}>
               <BannerCard

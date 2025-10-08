@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { Icon } from '@iconify/react';
 import { createTransaction, getProfile, getBalance } from '../services/api';
 import Logo from '../components/atoms/Logo/Logo';
 import defaultProfileImage from '../assets/images/profilePhoto.png';
@@ -633,7 +634,11 @@ const PaymentPage = () => {
               {isBalanceVisible ? formatAmount(balance?.balance || 0) : 'Rp ••••••••'}
             </BalanceAmount>
             <ViewBalanceLink onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
-              <span>👁️</span>
+              <Icon 
+                icon="mdi:eye" 
+                width="16" 
+                height="16"
+              />
               <span>{isBalanceVisible ? 'Tutup Saldo' : 'Lihat Saldo'}</span>
             </ViewBalanceLink>
           </BalanceCard>

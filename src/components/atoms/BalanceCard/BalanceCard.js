@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Icon } from '@iconify/react';
 
 const BalanceCardContainer = styled.div`
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
@@ -77,7 +78,11 @@ const BalanceCard = ({ balance = 0, onToggleVisibility }) => {
         {isVisible ? formatBalance(balance) : 'Rp ••••••••'}
       </BalanceAmount>
       <ViewBalanceButton onClick={handleToggle}>
-        <span>👁️</span>
+        <Icon 
+          icon="mdi:eye" 
+          width="16" 
+          height="16"
+        />
         {isVisible ? 'Sembunyikan' : 'Lihat Saldo'}
       </ViewBalanceButton>
       <PatternOverlay />
