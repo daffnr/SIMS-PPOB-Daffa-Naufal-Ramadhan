@@ -379,14 +379,44 @@ const TransactionPage = () => {
     }
   }, [token, offset, limit, allTransactions, selectedMonth, filterTransactionsByMonth]);
 
-  const formatAmount = (amount) => {
+  const formatAmount = (amount, isPayment = false) => {
     const formatted = new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0,
     }).format(Math.abs(amount));
     
-    return amount >= 0 ? `+ ${formatted}` : `- ${formatted}`;
+    // If it's a payment transaction, always show with minus sign
+    if (isPayment) {
+      return `- ${formatted}`;
+    }
+    
+    // For top up transactions, show with plus sign
+    return `+ ${formatted}`;
+  };
+
+  const formatBalance = (amount) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  // Function to determine if transaction is a payment (should be red) or top up (should be green)
+  const isPaymentTransaction = (transaction) => {
+    // If total_amount is negative, it's a payment (outgoing)
+    if (transaction.total_amount < 0) {
+      return true;
+    }
+    
+    // Check transaction type or description to determine if it's a payment
+    const description = transaction.description || transaction.transaction_type || '';
+    const paymentKeywords = ['pulsa', 'listrik', 'pdam', 'bpjs', 'pajak', 'pembayaran', 'bayar'];
+    
+    return paymentKeywords.some(keyword => 
+      description.toLowerCase().includes(keyword.toLowerCase())
+    );
   };
 
   const formatDate = (dateString) => {
@@ -459,7 +489,7 @@ const TransactionPage = () => {
             <BalanceCardBackground />
             <BalanceTitle>Saldo anda</BalanceTitle>
             <BalanceAmount>
-              {isBalanceVisible ? formatAmount(balance?.balance || 0) : 'Rp ••••••••'}
+              {isBalanceVisible ? formatBalance(balance?.balance || 0) : 'Rp ••••••••'}
             </BalanceAmount>
             <ViewBalanceLink onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
               <span>👁️</span>
@@ -498,9 +528,9 @@ const TransactionPage = () => {
                 <TransactionItem key={index}>
                   <TransactionLeft>
                     <TransactionAmount 
-                      className={transaction.total_amount >= 0 ? 'positive' : 'negative'}
+                      className={isPaymentTransaction(transaction) ? 'negative' : 'positive'}
                     >
-                      {formatAmount(transaction.total_amount)}
+                      {formatAmount(transaction.total_amount, isPaymentTransaction(transaction))}
                     </TransactionAmount>
                     <TransactionDate>
                       {formatDate(transaction.created_on)}

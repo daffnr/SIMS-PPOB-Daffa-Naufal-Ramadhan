@@ -144,11 +144,21 @@ const ServiceInfo = styled.div`
 const ServiceIcon = styled.div`
   width: 40px;
   height: 40px;
-  background: #fbbf24;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  background: #f3f4f6;
+`;
+
+const ServiceIconImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const ServiceIconEmoji = styled.div`
   font-size: 20px;
 `;
 
@@ -188,6 +198,24 @@ const AmountInput = styled.input`
   &::placeholder {
     color: #9ca3af;
   }
+`;
+
+const AmountDisplay = styled.div`
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #f9fafb;
+  color: #1f2937;
+  font-weight: 500;
+`;
+
+const ValidationError = styled.div`
+  color: #dc2626;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
 `;
 
 const PayButton = styled.button`
@@ -393,11 +421,11 @@ const PaymentPage = () => {
   const [error, setError] = useState(null);
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
   
-  const [amount, setAmount] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('confirm'); // confirm, success, error
   const [modalData, setModalData] = useState(null);
+  const [validationError, setValidationError] = useState('');
   
   // Get service data from location state
   const service = location.state?.service;
@@ -435,11 +463,6 @@ const PaymentPage = () => {
     fetchInitialData();
   }, [isLoggedIn, token, navigate, service, fetchInitialData]);
 
-  const handleAmountChange = (e) => {
-    const value = e.target.value.replace(/[^0-9]/g, '');
-    setAmount(value);
-  };
-
   const formatAmount = (amount) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
@@ -448,17 +471,50 @@ const PaymentPage = () => {
     }).format(amount);
   };
 
-  const isAmountValid = () => {
-    const numAmount = parseInt(amount);
-    return numAmount > 0;
+  const isPaymentValid = () => {
+    if (!service) return false;
+    if (!balance) return false;
+    
+    // Check if user has enough balance
+    return balance.balance >= service.service_tariff;
+  };
+
+  const handleImageError = (e) => {
+    // Fallback jika gambar gagal dimuat
+    e.target.style.display = 'none';
+    e.target.nextSibling.style.display = 'flex';
+  };
+  
+  // Fallback emoji berdasarkan service code
+  const getFallbackEmoji = (code) => {
+    const emojiMap = {
+      'PAJAK': '🏠',
+      'PLN': '⚡',
+      'PDAM': '💧',
+      'PULSA': '📱',
+      'PGN': '🔥',
+      'MUSIK': '🎵',
+      'TV': '📺',
+      'PAKET_DATA': '📶',
+      'VOUCHER_GAME': '🎮',
+      'VOUCHER_MAKANAN': '🍔',
+      'QURBAN': '🌙',
+      'ZAKAT': '🤲'
+    };
+    return emojiMap[code] || '📋';
   };
 
   const handlePayClick = () => {
-    if (!isAmountValid()) return;
+    if (!isPaymentValid()) {
+      setValidationError('Saldo tidak mencukupi untuk melakukan pembayaran');
+      return;
+    }
     
+    setValidationError('');
     setModalData({
       serviceName: service.service_name,
-      amount: parseInt(amount)
+      serviceIcon: service.service_icon,
+      amount: service.service_tariff
     });
     setModalType('confirm');
     setIsModalOpen(true);
@@ -478,7 +534,9 @@ const PaymentPage = () => {
       // Show success modal
       setModalData({
         serviceName: service.service_name,
-        amount: parseInt(amount)
+        serviceIcon: service.service_icon,
+        amount: service.service_tariff,
+        transactionId: response.data.transaction_id
       });
       setModalType('success');
       setIsModalOpen(true);
@@ -491,7 +549,8 @@ const PaymentPage = () => {
       // Show error modal
       setModalData({
         serviceName: service.service_name,
-        amount: parseInt(amount),
+        serviceIcon: service.service_icon,
+        amount: service.service_tariff,
         error: err.message
       });
       setModalType('error');
@@ -560,25 +619,35 @@ const PaymentPage = () => {
             <SectionTitle>PemBayaran</SectionTitle>
             
             <ServiceInfo>
-              <ServiceIcon>⚡</ServiceIcon>
+              <ServiceIcon>
+                <ServiceIconImage 
+                  src={service?.service_icon} 
+                  alt={service?.service_name}
+                  onError={handleImageError}
+                />
+                <ServiceIconEmoji style={{ display: 'none' }}>
+                  {getFallbackEmoji(service?.service_code)}
+                </ServiceIconEmoji>
+              </ServiceIcon>
               <ServiceName>{service?.service_name}</ServiceName>
             </ServiceInfo>
 
             <InputContainer>
               <InputIcon>💳</InputIcon>
-              <AmountInput
-                type="text"
-                placeholder="Masukkan nominal"
-                value={amount}
-                onChange={handleAmountChange}
-              />
+              <AmountDisplay>
+                {formatAmount(service?.service_tariff || 0)}
+              </AmountDisplay>
             </InputContainer>
+
+            {validationError && (
+              <ValidationError>{validationError}</ValidationError>
+            )}
 
             <PayButton 
               onClick={handlePayClick}
-              disabled={!isAmountValid() || isProcessing}
+              disabled={!isPaymentValid() || isProcessing}
             >
-              {isProcessing ? 'Processing...' : 'Bayar'}
+              {isProcessing ? 'Processing...' : 'Bayar Sekarang'}
             </PayButton>
           </PaymentSection>
         </LeftSection>
@@ -604,7 +673,20 @@ const PaymentPage = () => {
           <ModalContent onClick={(e) => e.stopPropagation()}>
             {modalType === 'confirm' && (
               <>
-                <ModalIcon>💳</ModalIcon>
+                <ModalIcon>
+                  <img 
+                    src={modalData?.serviceIcon} 
+                    alt={modalData?.serviceName}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div style={{ display: 'none', fontSize: '32px' }}>
+                    {getFallbackEmoji(service?.service_code)}
+                  </div>
+                </ModalIcon>
                 <ModalTitle>Konfirmasi Pembayaran</ModalTitle>
                 <ModalMessage>
                   Beli {modalData?.serviceName} senilai
@@ -623,7 +705,18 @@ const PaymentPage = () => {
             
             {modalType === 'success' && (
               <>
-                <ModalIcon type="success">✓</ModalIcon>
+                <ModalIcon type="success">
+                  <img 
+                    src={modalData?.serviceIcon} 
+                    alt={modalData?.serviceName}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div style={{ display: 'none', fontSize: '32px' }}>✓</div>
+                </ModalIcon>
                 <ModalTitle>Pembayaran Berhasil!</ModalTitle>
                 <ModalMessage>
                   Pembayaran {modalData?.serviceName} sebesar
@@ -639,7 +732,18 @@ const PaymentPage = () => {
             
             {modalType === 'error' && (
               <>
-                <ModalIcon type="error">✕</ModalIcon>
+                <ModalIcon type="error">
+                  <img 
+                    src={modalData?.serviceIcon} 
+                    alt={modalData?.serviceName}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div style={{ display: 'none', fontSize: '32px' }}>✕</div>
+                </ModalIcon>
                 <ModalTitle>Pembayaran Gagal</ModalTitle>
                 <ModalMessage>
                   Pembayaran {modalData?.serviceName} sebesar {formatAmount(modalData?.amount || 0)}
