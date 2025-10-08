@@ -13,24 +13,58 @@ import {
   fetchServicesAsync, 
   fetchBannersAsync
 } from '../../../features/dashboard/dashboardSlice';
-import { logout } from '../../../features/auth/authSlice';
 
 const DashboardContainer = styled.div`
   min-height: 100vh;
   background-color: #f9fafb;
   padding: 24px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    padding: 12px 0;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+    padding: 10px 0;
+    gap: 8px;
+  }
 `;
 
 const Navigation = styled.div`
   display: flex;
   gap: 24px;
+  
+  @media (max-width: 768px) {
+    gap: 16px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 `;
 
 const NavLink = styled.a`
@@ -38,6 +72,15 @@ const NavLink = styled.a`
   text-decoration: none;
   font-weight: 500;
   cursor: pointer;
+  font-size: 16px;
+  
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
   
   &:hover {
     color: #dc2626;
@@ -50,6 +93,17 @@ const UserSection = styled.div`
   align-items: flex-start;
   margin-bottom: 32px;
   gap: 32px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 16px;
+    margin-bottom: 20px;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -60,6 +114,11 @@ const BalanceSection = styled.div`
   flex: 1;
   display: flex;
   justify-content: flex-end;
+  
+  @media (max-width: 768px) {
+    justify-content: center;
+    width: 100%;
+  }
 `;
 
 const LoadingSpinner = styled.div`
@@ -101,14 +160,12 @@ const Dashboard = () => {
   } = useSelector((state) => state.dashboard);
   
   useEffect(() => {
-    // Only fetch data if user is logged in
     if (isLoggedIn) {
       dispatch(fetchProfileAsync());
       dispatch(fetchBalanceAsync());
       dispatch(fetchServicesAsync());
       dispatch(fetchBannersAsync());
     } else {
-      // Redirect to login if not logged in
       navigate('/login');
     }
   }, [dispatch, isLoggedIn, navigate]);
@@ -118,13 +175,9 @@ const Dashboard = () => {
   };
   
   const handleBannerClick = (banner) => {
-    // Navigate to promotion detail
+    // TODO: Implement banner click navigation
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
   
   if (isLoading) {
     return (

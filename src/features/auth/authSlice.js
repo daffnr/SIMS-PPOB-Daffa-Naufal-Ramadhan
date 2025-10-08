@@ -70,10 +70,6 @@ export const validateTokenAsync = createAsyncThunk(
   }
 );
 
-// Helper function untuk cek token dari localStorage
-const getTokenFromStorage = () => {
-  return localStorage.getItem('token');
-};
 
 const getUserFromStorage = () => {
   try {

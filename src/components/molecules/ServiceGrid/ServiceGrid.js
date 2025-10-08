@@ -3,18 +3,28 @@ import styled from 'styled-components';
 import ServiceCard from '../../atoms/ServiceCard/ServiceCard';
 
 const ServiceGridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  display: flex;
   gap: 16px;
   margin-bottom: 32px;
+  overflow-x: auto;
+  padding-bottom: 8px;
   
   @media (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
   }
   
   @media (max-width: 480px) {
-    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
   }
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 const ServiceGrid = ({ services = [], onServiceClick }) => {
@@ -22,10 +32,10 @@ const ServiceGrid = ({ services = [], onServiceClick }) => {
     return (
       <ServiceGridContainer>
         <div style={{ 
-          gridColumn: '1 / -1', 
           textAlign: 'center', 
           color: '#6b7280', 
-          padding: '40px' 
+          padding: '40px',
+          width: '100%'
         }}>
           Tidak ada layanan tersedia
         </div>

@@ -11,20 +11,53 @@ const PaymentContainer = styled.div`
   min-height: 100vh;
   background-color: #f9fafb;
   padding: 24px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    padding: 12px 0;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+    padding: 10px 0;
+    gap: 8px;
+  }
 `;
-
-
 
 const Navigation = styled.div`
   display: flex;
   gap: 32px;
+  
+  @media (max-width: 768px) {
+    gap: 16px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 `;
 
 const NavLink = styled.a`
@@ -33,6 +66,15 @@ const NavLink = styled.a`
   font-weight: 500;
   cursor: pointer;
   transition: color 0.2s ease;
+  font-size: 16px;
+  
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
   
   &:hover {
     color: #dc2626;
@@ -49,12 +91,29 @@ const MainContent = styled.div`
   gap: 32px;
   max-width: 1200px;
   margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 20px;
+  }
 `;
 
 const LeftSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  
+  @media (max-width: 768px) {
+    gap: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 16px;
+  }
 `;
 
 const UserSection = styled.div`
@@ -159,24 +218,6 @@ const InputIcon = styled.div`
   font-size: 18px;
 `;
 
-const AmountInput = styled.input`
-  width: 100%;
-  padding: 16px 16px 16px 48px;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  font-size: 16px;
-  background: white;
-  transition: border-color 0.2s ease;
-  
-  &:focus {
-    outline: none;
-    border-color: #dc2626;
-  }
-  
-  &::placeholder {
-    color: #9ca3af;
-  }
-`;
 
 const AmountDisplay = styled.div`
   width: 100%;

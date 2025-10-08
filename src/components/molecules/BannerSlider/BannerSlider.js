@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import BannerCard from '../../atoms/BannerCard/BannerCard';
 
 const BannerSliderContainer = styled.div`
   margin-top: 32px;
+  
+  @media (max-width: 768px) {
+    margin-top: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-top: 20px;
+  }
 `;
 
 const BannerTitle = styled.h3`
@@ -11,12 +19,30 @@ const BannerTitle = styled.h3`
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 20px;
+  
+  @media (max-width: 768px) {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
 `;
 
 const SliderWrapper = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 16px;
+  
+  @media (max-width: 768px) {
+    border-radius: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    border-radius: 8px;
+  }
 `;
 
 const SliderTrack = styled.div`
@@ -29,6 +55,18 @@ const BannerSlide = styled.div`
   min-width: 320px;
   min-height: 200px;
   margin-right: 12px;
+  
+  @media (max-width: 768px) {
+    min-width: 280px;
+    min-height: 180px;
+    margin-right: 10px;
+  }
+  
+  @media (max-width: 480px) {
+    min-width: 240px;
+    min-height: 160px;
+    margin-right: 8px;
+  }
 `;
 
 const NavigationButton = styled.button`
@@ -91,25 +129,28 @@ const Dot = styled.button`
 const BannerSlider = ({ banners = [], onBannerClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % banners.length);
-  };
+  const nextSlide = useCallback(() => {
+    if (currentIndex < 2) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      setCurrentIndex(0);
+    }
+  }, [currentIndex]);
   
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
-  };
+  const prevSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + 3) % 3);
+  }, []);
   
   const goToSlide = (index) => {
     setCurrentIndex(index);
   };
   
-  // Auto slide every 5 seconds
   useEffect(() => {
     if (banners.length > 1) {
       const interval = setInterval(nextSlide, 5000);
       return () => clearInterval(interval);
     }
-  }, [banners.length]);
+  }, [currentIndex, nextSlide, banners.length]);
   
   if (!banners || banners.length === 0) {
     return (
@@ -136,7 +177,7 @@ const BannerSlider = ({ banners = [], onBannerClick }) => {
             </NextButton>
           </>
         )}
-        <SliderTrack translateX={-currentIndex * 336}>
+        <SliderTrack translateX={-currentIndex * (window.innerWidth <= 480 ? 248 : window.innerWidth <= 768 ? 290 : 336)}>
           {banners.map((banner, index) => (
             <BannerSlide key={index}>
               <BannerCard
@@ -149,7 +190,7 @@ const BannerSlider = ({ banners = [], onBannerClick }) => {
       </SliderWrapper>
       {banners.length > 1 && (
         <DotsContainer>
-          {banners.map((_, index) => (
+          {banners.slice(0, 3).map((_, index) => (
             <Dot
               key={index}
               active={index === currentIndex}

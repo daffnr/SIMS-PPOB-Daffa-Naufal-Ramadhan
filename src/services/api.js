@@ -1,5 +1,14 @@
 const API_BASE_URL = 'https://take-home-test-api.nutech-integrasi.com';
 
+const fetchWithTimeout = (url, options, timeout = 10000) => {
+  return Promise.race([
+    fetch(url, options),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Request timeout')), timeout)
+    )
+  ]);
+};
+
 export const registerUser = async (userData) => {
   
   try {
@@ -20,6 +29,10 @@ export const registerUser = async (userData) => {
     const result = await response.json();
     return result;
   } catch (error) {
+    // Handle specific network errors
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error('Tidak dapat terhubung ke server. Periksa koneksi internet Anda atau coba lagi nanti.');
+    }
     throw error;
   }
 };
@@ -27,7 +40,7 @@ export const registerUser = async (userData) => {
 export const loginUser = async (userData) => {
   
   try {
-    const response = await fetch(`${API_BASE_URL}/login`, {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,6 +57,12 @@ export const loginUser = async (userData) => {
     const result = await response.json();
     return result;
   } catch (error) {
+    if (error.message === 'Request timeout') {
+      throw new Error('Koneksi timeout. Server mungkin sedang sibuk, coba lagi nanti.');
+    }
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error('Tidak dapat terhubung ke server. Periksa koneksi internet Anda atau coba lagi nanti.');
+    }
     throw error;
   }
 };

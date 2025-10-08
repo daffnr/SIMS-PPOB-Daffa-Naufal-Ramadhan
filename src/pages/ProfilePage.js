@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,20 +11,53 @@ const ProfileContainer = styled.div`
   min-height: 100vh;
   background-color: #ffffff;
   padding: 20px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
-  padding: 0 20px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    gap: 8px;
+  }
 `;
-
 
 const Navigation = styled.nav`
   display: flex;
   gap: 32px;
+  
+  @media (max-width: 768px) {
+    gap: 16px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 `;
 
 const NavLink = styled.a`
@@ -33,6 +66,14 @@ const NavLink = styled.a`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
   
   &.active {
     color: #dc2626;
@@ -45,11 +86,27 @@ const ProfileSection = styled.div`
   align-items: center;
   max-width: 400px;
   margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    max-width: 350px;
+  }
+  
+  @media (max-width: 480px) {
+    max-width: 300px;
+  }
 `;
 
 const ProfileImageContainer = styled.div`
   position: relative;
   margin-bottom: 24px;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+  }
 `;
 
 const ProfileImage = styled.img`
@@ -57,6 +114,16 @@ const ProfileImage = styled.img`
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
+  
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 80px;
+    height: 80px;
+  }
   border: 3px solid #f3f4f6;
 `;
 
@@ -203,16 +270,7 @@ const ProfilePage = () => {
     last_name: ''
   });
 
-  useEffect(() => {
-    if (!isLoggedIn || !token) {
-      navigate('/login');
-      return;
-    }
-    
-    fetchProfile();
-  }, [isLoggedIn, token, navigate]);
-
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -228,7 +286,16 @@ const ProfilePage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (!isLoggedIn || !token) {
+      navigate('/login');
+      return;
+    }
+    
+    fetchProfile();
+  }, [isLoggedIn, token, navigate, fetchProfile]);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];

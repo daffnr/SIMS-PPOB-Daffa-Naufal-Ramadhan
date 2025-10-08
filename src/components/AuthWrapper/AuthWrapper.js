@@ -4,7 +4,7 @@ import { validateTokenAsync, setTokenValidated } from '../../features/auth/authS
 
 const AuthWrapper = ({ children }) => {
   const dispatch = useDispatch();
-  const { isLoggedIn, tokenValidated, isLoading, user } = useSelector((state) => state.auth);
+  const { tokenValidated, isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -13,13 +13,11 @@ const AuthWrapper = ({ children }) => {
 
       if (token && userData) {
         try {
-          // Validasi token dengan API
           await dispatch(validateTokenAsync(token)).unwrap();
         } catch (error) {
-          // Token tidak valid, sudah dihapus di authSlice
+          // Token invalid, already handled in authSlice
         }
       } else {
-        // Tidak ada token, set tokenValidated = true agar bisa render
         dispatch(setTokenValidated());
       }
     };
@@ -29,7 +27,6 @@ const AuthWrapper = ({ children }) => {
     }
   }, [dispatch, tokenValidated]);
 
-  // Tampilkan loading saat validasi token
   if (!tokenValidated || isLoading) {
     return (
       <div style={{

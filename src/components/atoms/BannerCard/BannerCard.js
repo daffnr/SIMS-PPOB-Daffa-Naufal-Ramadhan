@@ -10,6 +10,16 @@ const BannerCardContainer = styled.div`
   align-items: center;
   justify-content: center;
   
+  @media (max-width: 768px) {
+    width: 280px;
+    height: 180px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 240px;
+    height: 160px;
+  }
+  
   &:hover {
     transform: translateY(-2px);
   }

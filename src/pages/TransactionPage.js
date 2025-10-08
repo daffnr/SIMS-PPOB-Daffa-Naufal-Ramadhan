@@ -11,19 +11,53 @@ const TransactionContainer = styled.div`
   min-height: 100vh;
   background-color: #f9fafb;
   padding: 24px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    padding: 12px 0;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+    padding: 10px 0;
+    gap: 8px;
+  }
 `;
-
 
 const Navigation = styled.nav`
   display: flex;
   gap: 32px;
+  
+  @media (max-width: 768px) {
+    gap: 16px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 `;
 
 const NavLink = styled.a`
@@ -32,6 +66,14 @@ const NavLink = styled.a`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
   
   &.active {
     color: #dc2626;
@@ -44,6 +86,17 @@ const UserSection = styled.div`
   align-items: flex-start;
   margin-bottom: 32px;
   gap: 32px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 16px;
+    margin-bottom: 20px;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -54,6 +107,11 @@ const BalanceSection = styled.div`
   flex: 1;
   display: flex;
   justify-content: flex-end;
+  
+  @media (max-width: 768px) {
+    justify-content: center;
+    width: 100%;
+  }
 `;
 
 const BalanceCard = styled.div`
@@ -122,6 +180,16 @@ const MonthFilter = styled.div`
   margin-bottom: 24px;
   overflow-x: auto;
   padding-bottom: 8px;
+  
+  @media (max-width: 768px) {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
 `;
 
 const MonthButton = styled.button`
@@ -133,6 +201,14 @@ const MonthButton = styled.button`
   cursor: pointer;
   padding: 8px 0;
   white-space: nowrap;
+  
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
   
   &.active {
     color: #1f2937;
@@ -253,28 +329,42 @@ const TransactionPage = () => {
   const [error, setError] = useState(null);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const [selectedMonth, setSelectedMonth] = useState('Semua');
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
-  
-  const months = ['Semua', 'Maret', 'Mei', 'Juni', 'Juli', 'Agustus', 'September'];
   const limit = 5;
+
+  // Generate months array with real-time months (current month on the right)
+  const generateMonths = () => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const months = [];
+    
+    // Generate last 6 months including current month
+    for (let i = 5; i >= 0; i--) {
+      const monthDate = new Date(now.getFullYear(), currentMonth - i, 1);
+      const monthName = monthDate.toLocaleDateString('id-ID', { month: 'long' });
+      months.push(monthName);
+    }
+    
+    return months;
+  };
+
+  const months = generateMonths();
+  const currentMonthName = new Date().toLocaleDateString('id-ID', { month: 'long' });
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthName);
 
   // Function to get month number from month name
   const getMonthNumber = (monthName) => {
     const monthMap = {
-      'Maret': 2,    // March (0-indexed)
-      'Mei': 4,      // May (0-indexed)
-      'Juni': 5,     // June (0-indexed)
-      'Juli': 6,     // July (0-indexed)
-      'Agustus': 7,  // August (0-indexed)
-      'September': 8 // September (0-indexed)
+      'Januari': 0, 'Februari': 1, 'Maret': 2, 'April': 3,
+      'Mei': 4, 'Juni': 5, 'Juli': 6, 'Agustus': 7,
+      'September': 8, 'Oktober': 9, 'November': 10, 'Desember': 11
     };
     return monthMap[monthName];
   };
 
   // Function to filter transactions by month
   const filterTransactionsByMonth = useCallback((transactions, monthName) => {
-    if (!monthName || monthName === 'Semua') {
+    if (!monthName) {
       return transactions;
     }
     
@@ -524,10 +614,7 @@ const TransactionPage = () => {
 
         {filteredTransactions.length === 0 ? (
           <EmptyState>
-            {selectedMonth === 'Semua' 
-              ? 'Maaf tidak ada histori transaksi saat ini'
-              : `Maaf tidak ada histori transaksi untuk bulan ${selectedMonth}`
-            }
+            Maaf tidak ada histori transaksi untuk bulan {selectedMonth}
           </EmptyState>
         ) : (
           <>

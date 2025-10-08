@@ -11,20 +11,53 @@ const TopUpContainer = styled.div`
   min-height: 100vh;
   background-color: #f9fafb;
   padding: 24px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    padding: 12px 0;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+    padding: 10px 0;
+    gap: 8px;
+  }
 `;
-
-
 
 const Navigation = styled.nav`
   display: flex;
   gap: 32px;
+  
+  @media (max-width: 768px) {
+    gap: 16px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 `;
 
 const NavLink = styled.a`
@@ -34,6 +67,14 @@ const NavLink = styled.a`
   font-weight: 500;
   cursor: pointer;
   
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
+  
   &.active {
     color: #dc2626;
   }
@@ -42,6 +83,15 @@ const NavLink = styled.a`
 const MainContent = styled.div`
   display: flex;
   gap: 32px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 20px;
+  }
 `;
 
 const LeftSection = styled.div`
@@ -54,6 +104,14 @@ const RightSection = styled.div`
 
 const UserInfo = styled.div`
   margin-bottom: 32px;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 20px;
+  }
 `;
 
 const BalanceCard = styled.div`
