@@ -9,8 +9,8 @@ export const fetchProfileAsync = createAsyncThunk(
       const state = getState();
       const token = state.auth.user?.token || localStorage.getItem('token');
       
-      if (!token) {
-        throw new Error('No authentication token found');
+      if (!token || !state.auth.isLoggedIn) {
+        throw new Error('No authentication token found or user not logged in');
       }
       
       const response = await getProfile(token);
@@ -28,8 +28,8 @@ export const fetchBalanceAsync = createAsyncThunk(
       const state = getState();
       const token = state.auth.user?.token || localStorage.getItem('token');
       
-      if (!token) {
-        throw new Error('No authentication token found');
+      if (!token || !state.auth.isLoggedIn) {
+        throw new Error('No authentication token found or user not logged in');
       }
       
       const response = await getBalance(token);
@@ -47,8 +47,8 @@ export const fetchServicesAsync = createAsyncThunk(
       const state = getState();
       const token = state.auth.user?.token || localStorage.getItem('token');
       
-      if (!token) {
-        throw new Error('No authentication token found');
+      if (!token || !state.auth.isLoggedIn) {
+        throw new Error('No authentication token found or user not logged in');
       }
       
       const response = await getServices(token);
@@ -66,8 +66,8 @@ export const fetchBannersAsync = createAsyncThunk(
       const state = getState();
       const token = state.auth.user?.token || localStorage.getItem('token');
       
-      if (!token) {
-        throw new Error('No authentication token found');
+      if (!token || !state.auth.isLoggedIn) {
+        throw new Error('No authentication token found or user not logged in');
       }
       
       const response = await getBanners(token);

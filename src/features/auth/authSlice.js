@@ -58,7 +58,7 @@ const initialState = {
   isLoading: false,
   error: null,
   isRegistered: false,
-  isLoggedIn: !!localStorage.getItem('token'),
+  isLoggedIn: !!localStorage.getItem('token') && !!localStorage.getItem('user'),
 };
 
 const authSlice = createSlice({
@@ -72,6 +72,13 @@ const authSlice = createSlice({
       state.isRegistered = false;
     },
     logout: (state) => {
+      state.user = null;
+      state.isLoggedIn = false;
+      state.error = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    },
+    clearAuthData: (state) => {
       state.user = null;
       state.isLoggedIn = false;
       state.error = null;
@@ -146,5 +153,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, clearRegistrationStatus, logout } = authSlice.actions;
+export const { clearError, clearRegistrationStatus, logout, clearAuthData } = authSlice.actions;
 export default authSlice.reducer;

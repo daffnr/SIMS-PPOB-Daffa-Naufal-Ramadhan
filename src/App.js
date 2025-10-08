@@ -10,42 +10,45 @@ import TopUpPage from './pages/TopUpPage';
 import PaymentPage from './pages/PaymentPage';
 
 function App() {
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
+  
+  // Additional check to ensure user data exists
+  const isAuthenticated = isLoggedIn && user && user.token;
   
   return (
     <div className="App">
       <Routes>
         <Route 
           path="/" 
-          element={isLoggedIn ? <HomePage /> : <LoginPage />} 
+          element={isAuthenticated ? <Navigate to="/home" replace /> : <LoginPage />} 
         />
         <Route 
           path="/login" 
-          element={isLoggedIn ? <Navigate to="/home" replace /> : <LoginPage />} 
+          element={isAuthenticated ? <Navigate to="/home" replace /> : <LoginPage />} 
         />
         <Route 
           path="/register" 
-          element={isLoggedIn ? <Navigate to="/home" replace /> : <RegisterPage />} 
+          element={isAuthenticated ? <Navigate to="/home" replace /> : <RegisterPage />} 
         />
         <Route 
           path="/home" 
-          element={isLoggedIn ? <HomePage /> : <Navigate to="/login" replace />} 
+          element={isAuthenticated ? <HomePage /> : <Navigate to="/login" replace />} 
         />
         <Route 
           path="/profile" 
-          element={isLoggedIn ? <ProfilePage /> : <Navigate to="/login" replace />} 
+          element={isAuthenticated ? <ProfilePage /> : <Navigate to="/login" replace />} 
         />
         <Route 
           path="/transaction" 
-          element={isLoggedIn ? <TransactionPage /> : <Navigate to="/login" replace />} 
+          element={isAuthenticated ? <TransactionPage /> : <Navigate to="/login" replace />} 
         />
         <Route 
           path="/topup" 
-          element={isLoggedIn ? <TopUpPage /> : <Navigate to="/login" replace />} 
+          element={isAuthenticated ? <TopUpPage /> : <Navigate to="/login" replace />} 
         />
         <Route 
           path="/payment" 
-          element={isLoggedIn ? <PaymentPage /> : <Navigate to="/login" replace />} 
+          element={isAuthenticated ? <PaymentPage /> : <Navigate to="/login" replace />} 
         />
       </Routes>
     </div>

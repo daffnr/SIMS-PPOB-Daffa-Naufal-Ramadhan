@@ -89,6 +89,7 @@ const ErrorMessage = styled.div`
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const { 
     profile, 
     balance, 
@@ -99,12 +100,17 @@ const Dashboard = () => {
   } = useSelector((state) => state.dashboard);
   
   useEffect(() => {
-    // Fetch all dashboard data
-    dispatch(fetchProfileAsync());
-    dispatch(fetchBalanceAsync());
-    dispatch(fetchServicesAsync());
-    dispatch(fetchBannersAsync());
-  }, [dispatch]);
+    // Only fetch data if user is logged in
+    if (isLoggedIn) {
+      dispatch(fetchProfileAsync());
+      dispatch(fetchBalanceAsync());
+      dispatch(fetchServicesAsync());
+      dispatch(fetchBannersAsync());
+    } else {
+      // Redirect to login if not logged in
+      navigate('/login');
+    }
+  }, [dispatch, isLoggedIn, navigate]);
   
   const handleServiceClick = (service) => {
     navigate('/payment', { state: { service } });
