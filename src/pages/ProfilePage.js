@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getProfile, updateProfile, updateProfileImage } from '../services/api';
 import { logout } from '../features/auth/authSlice';
-import DefaultAvatar from '../components/atoms/DefaultAvatar/DefaultAvatar';
+import Logo from '../components/atoms/Logo/Logo';
+import defaultProfileImage from '../assets/images/profilePhoto.png';
 
 const ProfileContainer = styled.div`
   min-height: 100vh;
@@ -20,31 +21,6 @@ const Header = styled.header`
   padding: 0 20px;
 `;
 
-const Logo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
-const LogoIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  background-color: #dc2626;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-`;
-
-const LogoText = styled.h1`
-  color: #1f2937;
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-`;
 
 const Navigation = styled.nav`
   display: flex;
@@ -338,10 +314,7 @@ const ProfilePage = () => {
   return (
     <ProfileContainer>
       <Header>
-        <Logo>
-          <LogoIcon>B</LogoIcon>
-          <LogoText>SIMS PPOB</LogoText>
-        </Logo>
+        <Logo />
         <Navigation>
           <NavLink onClick={() => navigate('/topup')}>Top Up</NavLink>
           <NavLink onClick={() => navigate('/transaction')}>Transaction</NavLink>
@@ -351,11 +324,13 @@ const ProfilePage = () => {
 
       <ProfileSection>
         <ProfileImageContainer>
-          {profile.profile_image ? (
-            <ProfileImage src={profile.profile_image} alt="Profile" />
-          ) : (
-            <DefaultAvatar firstName={profile.first_name} lastName={profile.last_name} />
-          )}
+          <ProfileImage 
+            src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage} 
+            alt="Profile"
+            onError={(e) => {
+              e.target.src = defaultProfileImage;
+            }}
+          />
           <EditIcon onClick={() => document.getElementById('profile-image-input').click()}>
             ✏️
           </EditIcon>

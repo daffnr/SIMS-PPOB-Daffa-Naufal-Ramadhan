@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { topUp, getProfile, getBalance } from '../services/api';
-import DefaultAvatar from '../components/atoms/DefaultAvatar/DefaultAvatar';
+import Logo from '../components/atoms/Logo/Logo';
+import defaultProfileImage from '../assets/images/profilePhoto.png';
 
 const TopUpContainer = styled.div`
   min-height: 100vh;
@@ -18,31 +19,7 @@ const Header = styled.header`
   margin-bottom: 32px;
 `;
 
-const Logo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
 
-const LogoIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  background-color: #dc2626;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-`;
-
-const LogoText = styled.h1`
-  color: #1f2937;
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-`;
 
 const Navigation = styled.nav`
   display: flex;
@@ -476,10 +453,7 @@ const TopUpPage = () => {
   return (
     <TopUpContainer>
       <Header>
-        <Logo>
-          <LogoIcon>S</LogoIcon>
-          <LogoText>SIMS PPOB</LogoText>
-        </Logo>
+        <Logo />
         <Navigation>
           <NavLink href="#topup" className="active">Top Up</NavLink>
           <NavLink onClick={() => navigate('/transaction')}>Transaction</NavLink>
@@ -494,21 +468,20 @@ const TopUpPage = () => {
           <UserInfo>
             {profile && (
               <>
-                {profile.profile_image ? (
-                  <img 
-                    src={profile.profile_image} 
-                    alt="Profile" 
-                    style={{
-                      width: '80px',
-                      height: '80px',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      marginBottom: '12px'
-                    }}
-                  />
-                ) : (
-                  <DefaultAvatar firstName={profile.first_name} lastName={profile.last_name} />
-                )}
+                <img 
+                  src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage} 
+                  alt="Profile" 
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    marginBottom: '12px'
+                  }}
+                  onError={(e) => {
+                    e.target.src = defaultProfileImage;
+                  }}
+                />
                 <div style={{ color: '#6b7280', fontSize: '16px', marginBottom: '4px' }}>
                   Selamat datang,
                 </div>

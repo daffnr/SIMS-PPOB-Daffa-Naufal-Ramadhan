@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { createTransaction, getProfile, getBalance } from '../services/api';
-import DefaultAvatar from '../components/atoms/DefaultAvatar/DefaultAvatar';
+import Logo from '../components/atoms/Logo/Logo';
+import defaultProfileImage from '../assets/images/profilePhoto.png';
 
 const PaymentContainer = styled.div`
   min-height: 100vh;
@@ -18,31 +19,7 @@ const Header = styled.div`
   margin-bottom: 32px;
 `;
 
-const Logo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
 
-const LogoIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-`;
-
-const LogoText = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-  color: #1f2937;
-  margin: 0;
-`;
 
 const Navigation = styled.div`
   display: flex;
@@ -582,10 +559,7 @@ const PaymentPage = () => {
   return (
     <PaymentContainer>
       <Header>
-        <Logo>
-          <LogoIcon>S</LogoIcon>
-          <LogoText>SIMS PPOB</LogoText>
-        </Logo>
+        <Logo />
         <Navigation>
           <NavLink onClick={() => navigate('/topup')}>Top Up</NavLink>
           <NavLink onClick={() => navigate('/transaction')}>Transaction</NavLink>
@@ -599,15 +573,14 @@ const PaymentPage = () => {
         <LeftSection>
           <UserSection>
             <AvatarContainer>
-              {profile?.profile_image ? (
-                <img 
-                  src={profile.profile_image} 
-                  alt="Profile" 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                <DefaultAvatar />
-              )}
+              <img 
+                src={profile?.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage} 
+                alt="Profile" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={(e) => {
+                  e.target.src = defaultProfileImage;
+                }}
+              />
             </AvatarContainer>
             <UserInfo>
               <WelcomeText>Selamat datang,</WelcomeText>

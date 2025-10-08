@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import defaultProfileImage from '../../../assets/images/profilePhoto.png';
 
 const AvatarContainer = styled.div`
   display: flex;
@@ -69,37 +70,26 @@ const Avatar = ({ profile }) => {
   const initials = `${first_name[0] || ''}${last_name[0] || ''}`.toUpperCase() || "U";
   
   const handleImageError = (e) => {
-    // Fallback jika gambar gagal dimuat
-    e.target.style.display = 'none';
-    e.target.nextSibling.style.display = 'flex';
+    // Fallback ke default image jika gambar gagal dimuat
+    e.target.src = defaultProfileImage;
   };
   
   const handleImageLoad = (e) => {
-    // Sembunyikan fallback jika gambar berhasil dimuat
-    e.target.nextSibling.style.display = 'none';
+    // Gambar berhasil dimuat, tidak perlu melakukan apa-apa
   };
+  
+  // Tentukan gambar yang akan ditampilkan
+  const displayImage = profile_image && profile_image.trim() !== '' ? profile_image : defaultProfileImage;
   
   return (
     <AvatarContainer>
       <AvatarImageContainer>
-        {profile_image && (
-          <>
-            <ProfileImage 
-              src={profile_image} 
-              alt={fullName}
-              onError={handleImageError}
-              onLoad={handleImageLoad}
-            />
-            <InitialsFallback>
-              {initials}
-            </InitialsFallback>
-          </>
-        )}
-        {!profile_image && (
-          <InitialsFallback>
-            {initials}
-          </InitialsFallback>
-        )}
+        <ProfileImage 
+          src={displayImage} 
+          alt={fullName}
+          onError={handleImageError}
+          onLoad={handleImageLoad}
+        />
       </AvatarImageContainer>
       <WelcomeText>Selamat datang,</WelcomeText>
       <UserName>{fullName}</UserName>

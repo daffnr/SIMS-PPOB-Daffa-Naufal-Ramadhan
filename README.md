@@ -18,7 +18,6 @@ src/
 │   │   ├── BalanceCard/
 │   │   ├── BannerCard/
 │   │   ├── Button/
-│   │   ├── DefaultAvatar/
 │   │   ├── Input/
 │   │   ├── LoginButton/
 │   │   ├── LoginLink/

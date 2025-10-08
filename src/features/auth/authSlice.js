@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { registerUser, loginUser, updateProfile, updateProfileImage } from '../../services/api';
+import { registerUser, loginUser, updateProfile, updateProfileImage, getProfile } from '../../services/api';
 
 // Async thunk untuk register
 export const registerUserAsync = createAsyncThunk(
@@ -53,12 +53,45 @@ export const updateProfileImageAsync = createAsyncThunk(
   }
 );
 
+// Async thunk untuk validasi token
+export const validateTokenAsync = createAsyncThunk(
+  'auth/validateToken',
+  async (token, { rejectWithValue }) => {
+    try {
+      // Cek validitas token dengan memanggil API profile
+      const response = await getProfile(token);
+      return response;
+    } catch (error) {
+      // Jika token tidak valid, hapus dari localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      return rejectWithValue(error.message || 'Token tidak valid');
+    }
+  }
+);
+
+// Helper function untuk cek token dari localStorage
+const getTokenFromStorage = () => {
+  return localStorage.getItem('token');
+};
+
+const getUserFromStorage = () => {
+  try {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  } catch (error) {
+    localStorage.removeItem('user');
+    return null;
+  }
+};
+
 const initialState = {
-  user: JSON.parse(localStorage.getItem('user') || 'null'),
+  user: getUserFromStorage(),
   isLoading: false,
   error: null,
   isRegistered: false,
-  isLoggedIn: !!localStorage.getItem('token') && !!localStorage.getItem('user'),
+  isLoggedIn: false, // Tidak langsung set true, akan divalidasi terlebih dahulu
+  tokenValidated: false, // Flag untuk menandai apakah token sudah divalidasi
 };
 
 const authSlice = createSlice({
@@ -75,6 +108,7 @@ const authSlice = createSlice({
       state.user = null;
       state.isLoggedIn = false;
       state.error = null;
+      state.tokenValidated = false;
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     },
@@ -82,8 +116,15 @@ const authSlice = createSlice({
       state.user = null;
       state.isLoggedIn = false;
       state.error = null;
+      state.tokenValidated = false;
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+    },
+    setTokenValidated: (state) => {
+      state.tokenValidated = true;
+    },
+    setAuthLoading: (state, action) => {
+      state.isLoading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -149,9 +190,34 @@ const authSlice = createSlice({
       .addCase(updateProfileImageAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      })
+      // Token validation cases
+      .addCase(validateTokenAsync.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(validateTokenAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isLoggedIn = true;
+        state.tokenValidated = true;
+        state.error = null;
+      })
+      .addCase(validateTokenAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isLoggedIn = false;
+        state.tokenValidated = true;
+        state.user = null;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearError, clearRegistrationStatus, logout, clearAuthData } = authSlice.actions;
+export const { 
+  clearError, 
+  clearRegistrationStatus, 
+  logout, 
+  clearAuthData, 
+  setTokenValidated, 
+  setAuthLoading 
+} = authSlice.actions;
 export default authSlice.reducer;

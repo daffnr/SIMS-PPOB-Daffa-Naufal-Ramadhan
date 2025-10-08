@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import logoImage from '../../../assets/images/logo.png';
 
 const LogoContainer = styled.div`
   display: flex;
@@ -8,36 +9,11 @@ const LogoContainer = styled.div`
   margin-bottom: 24px;
 `;
 
-const LogoSquare = styled.div`
+const LogoImage = styled.img`
   width: 40px;
   height: 40px;
-  background-color: #dc2626;
+  object-fit: contain;
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-`;
-
-const LogoText = styled.div`
-  font-size: 24px;
-  font-weight: 700;
-  color: white;
-  position: relative;
-  
-  &::before {
-    content: 'S';
-    position: absolute;
-    left: -2px;
-    top: 0;
-  }
-  
-  &::after {
-    content: 'P';
-    position: absolute;
-    right: -2px;
-    top: 0;
-  }
 `;
 
 const BrandText = styled.h1`
@@ -50,9 +26,7 @@ const BrandText = styled.h1`
 const Logo = () => {
   return (
     <LogoContainer>
-      <LogoSquare>
-        <LogoText></LogoText>
-      </LogoSquare>
+      <LogoImage src={logoImage} alt="SIMS PPOB Logo" />
       <BrandText>SIMS PPOB</BrandText>
     </LogoContainer>
   );

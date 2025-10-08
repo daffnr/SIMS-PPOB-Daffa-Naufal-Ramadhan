@@ -13,6 +13,7 @@ import {
   fetchServicesAsync, 
   fetchBannersAsync
 } from '../../../features/dashboard/dashboardSlice';
+import { logout } from '../../../features/auth/authSlice';
 
 const DashboardContainer = styled.div`
   min-height: 100vh;
@@ -118,6 +119,11 @@ const Dashboard = () => {
   
   const handleBannerClick = (banner) => {
     // Navigate to promotion detail
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
   };
   
   if (isLoading) {

@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getTransactionHistory, getProfile, getBalance } from '../services/api';
-import DefaultAvatar from '../components/atoms/DefaultAvatar/DefaultAvatar';
+import Logo from '../components/atoms/Logo/Logo';
+import defaultProfileImage from '../assets/images/profilePhoto.png';
 
 const TransactionContainer = styled.div`
   min-height: 100vh;
@@ -18,31 +19,6 @@ const Header = styled.header`
   margin-bottom: 32px;
 `;
 
-const Logo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
-const LogoIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  background-color: #dc2626;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-`;
-
-const LogoText = styled.h1`
-  color: #1f2937;
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-`;
 
 const Navigation = styled.nav`
   display: flex;
@@ -196,11 +172,11 @@ const TransactionAmount = styled.div`
   font-weight: bold;
   
   &.positive {
-    color: #16a34a;
+    color: #06D6A0;
   }
   
   &.negative {
-    color: #dc2626;
+    color: #E63946;
   }
 `;
 
@@ -412,11 +388,42 @@ const TransactionPage = () => {
     
     // Check transaction type or description to determine if it's a payment
     const description = transaction.description || transaction.transaction_type || '';
-    const paymentKeywords = ['pulsa', 'listrik', 'pdam', 'bpjs', 'pajak', 'pembayaran', 'bayar'];
+    const serviceCode = transaction.service_code || '';
     
-    return paymentKeywords.some(keyword => 
+    // List of service codes that are payments (should be red with minus sign)
+    const paymentServiceCodes = [
+      'PAJAK', 'PLN', 'PDAM', 'PULSA', 'PGN', 'MUSIK', 'TV', 
+      'PAKET_DATA', 'VOUCHER_GAME', 'VOUCHER_MAKANAN', 'QURBAN', 'ZAKAT'
+    ];
+    
+    // Check if service_code is in payment list
+    if (paymentServiceCodes.includes(serviceCode)) {
+      return true;
+    }
+    
+    // Check description keywords for payments
+    const paymentKeywords = [
+      'pulsa', 'listrik', 'pdam', 'bpjs', 'pajak', 'pembayaran', 'bayar',
+      'pgn', 'musik', 'tv', 'paket data', 'voucher game', 'voucher makanan',
+      'qurban', 'zakat', 'berlangganan'
+    ];
+    
+    const isPaymentByDescription = paymentKeywords.some(keyword => 
       description.toLowerCase().includes(keyword.toLowerCase())
     );
+    
+    // Only TOPUP service_code or "top up" in description should be green
+    const isTopUp = serviceCode === 'TOPUP' || 
+                   description.toLowerCase().includes('top up') ||
+                   description.toLowerCase().includes('topup');
+    
+    // If it's explicitly a top up, return false (green)
+    if (isTopUp) {
+      return false;
+    }
+    
+    // For all other cases, if it matches payment criteria, it's a payment
+    return isPaymentByDescription;
   };
 
   const formatDate = (dateString) => {
@@ -442,10 +449,7 @@ const TransactionPage = () => {
   return (
     <TransactionContainer>
       <Header>
-        <Logo>
-          <LogoIcon>S</LogoIcon>
-          <LogoText>SIMS PPOB</LogoText>
-        </Logo>
+        <Logo />
         <Navigation>
           <NavLink onClick={() => navigate('/topup')}>Top Up</NavLink>
           <NavLink href="#transaction" className="active">Transaction</NavLink>
@@ -459,21 +463,20 @@ const TransactionPage = () => {
         <UserInfo>
           {profile && (
             <>
-              {profile.profile_image ? (
-                <img 
-                  src={profile.profile_image} 
-                  alt="Profile" 
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginBottom: '12px'
-                  }}
-                />
-              ) : (
-                <DefaultAvatar firstName={profile.first_name} lastName={profile.last_name} />
-              )}
+              <img 
+                src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage} 
+                alt="Profile" 
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  marginBottom: '12px'
+                }}
+                onError={(e) => {
+                  e.target.src = defaultProfileImage;
+                }}
+              />
               <div style={{ color: '#6b7280', fontSize: '16px', marginBottom: '4px' }}>
                 Selamat datang,
               </div>
