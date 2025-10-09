@@ -6,7 +6,6 @@
 - State Management dengan Redux Toolkit
 - Halaman Login, Register, Dashboard, Top up, Transaction, Akun
 - Responsive design
-- Dashboard dengan data real-time
 
 ## Struktur Project
 
