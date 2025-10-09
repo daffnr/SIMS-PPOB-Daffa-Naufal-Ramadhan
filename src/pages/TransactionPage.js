@@ -11,11 +11,11 @@ const TransactionContainer = styled.div`
   min-height: 100vh;
   background-color: #f9fafb;
   padding: 24px;
-  
+
   @media (max-width: 768px) {
     padding: 16px;
   }
-  
+
   @media (max-width: 480px) {
     padding: 12px;
   }
@@ -28,7 +28,7 @@ const Header = styled.header`
   margin-bottom: 24px;
   padding: 16px 0;
   border-bottom: 1px solid #e5e7eb;
-  
+
   @media (max-width: 768px) {
     margin-bottom: 20px;
     padding: 12px 0;
@@ -36,7 +36,7 @@ const Header = styled.header`
     gap: 12px;
     align-items: flex-start;
   }
-  
+
   @media (max-width: 480px) {
     margin-bottom: 16px;
     padding: 10px 0;
@@ -47,13 +47,13 @@ const Header = styled.header`
 const Navigation = styled.nav`
   display: flex;
   gap: 32px;
-  
+
   @media (max-width: 768px) {
     gap: 16px;
     width: 100%;
     justify-content: space-between;
   }
-  
+
   @media (max-width: 480px) {
     gap: 12px;
     flex-wrap: wrap;
@@ -66,15 +66,15 @@ const NavLink = styled.a`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  
+
   @media (max-width: 768px) {
     font-size: 14px;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 12px;
   }
-  
+
   &.active {
     color: #dc2626;
   }
@@ -86,13 +86,13 @@ const UserSection = styled.div`
   align-items: flex-start;
   margin-bottom: 32px;
   gap: 32px;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 20px;
     margin-bottom: 24px;
   }
-  
+
   @media (max-width: 480px) {
     gap: 16px;
     margin-bottom: 20px;
@@ -107,7 +107,7 @@ const BalanceSection = styled.div`
   flex: 1;
   display: flex;
   justify-content: flex-end;
-  
+
   @media (max-width: 768px) {
     justify-content: center;
     width: 100%;
@@ -154,7 +154,7 @@ const ViewBalanceLink = styled.div`
   font-size: 14px;
   cursor: pointer;
   opacity: 0.9;
-  
+
   &:hover {
     opacity: 1;
   }
@@ -180,12 +180,12 @@ const MonthFilter = styled.div`
   margin-bottom: 24px;
   overflow-x: auto;
   padding-bottom: 8px;
-  
+
   @media (max-width: 768px) {
     gap: 12px;
     margin-bottom: 20px;
   }
-  
+
   @media (max-width: 480px) {
     gap: 8px;
     margin-bottom: 16px;
@@ -201,20 +201,20 @@ const MonthButton = styled.button`
   cursor: pointer;
   padding: 8px 0;
   white-space: nowrap;
-  
+
   @media (max-width: 768px) {
     font-size: 13px;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 12px;
   }
-  
+
   &.active {
     color: #1f2937;
     font-weight: bold;
   }
-  
+
   &:hover {
     color: #1f2937;
   }
@@ -232,7 +232,7 @@ const TransactionItem = styled.div`
   align-items: center;
   padding: 16px 0;
   border-bottom: 1px solid #f3f4f6;
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -247,11 +247,11 @@ const TransactionLeft = styled.div`
 const TransactionAmount = styled.div`
   font-size: 16px;
   font-weight: bold;
-  
+
   &.positive {
     color: #06D6A0;
   }
-  
+
   &.negative {
     color: #E63946;
   }
@@ -277,7 +277,7 @@ const ShowMoreButton = styled.button`
   cursor: pointer;
   margin: 24px auto 0;
   display: block;
-  
+
   &:hover {
     color: #b91c1c;
   }
@@ -298,7 +298,7 @@ const LoadingSpinner = styled.div`
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 40px auto;
-  
+
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -319,7 +319,7 @@ const TransactionPage = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useSelector(state => state.auth);
   const token = user?.token || localStorage.getItem('token');
-  
+
   const [profile, setProfile] = useState(null);
   const [balance, setBalance] = useState(null);
   const [allTransactions, setAllTransactions] = useState([]);
@@ -337,14 +337,14 @@ const TransactionPage = () => {
     const now = new Date();
     const currentMonth = now.getMonth();
     const months = [];
-    
+
     // Generate last 6 months including current month
     for (let i = 5; i >= 0; i--) {
       const monthDate = new Date(now.getFullYear(), currentMonth - i, 1);
       const monthName = monthDate.toLocaleDateString('id-ID', { month: 'long' });
       months.push(monthName);
     }
-    
+
     return months;
   };
 
@@ -367,7 +367,7 @@ const TransactionPage = () => {
     if (!monthName) {
       return transactions;
     }
-    
+
     const targetMonth = getMonthNumber(monthName);
     return transactions.filter(transaction => {
       const transactionDate = new Date(transaction.created_on);
@@ -386,23 +386,23 @@ const TransactionPage = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const [profileResponse, balanceResponse, transactionResponse] = await Promise.all([
         getProfile(token),
         getBalance(token),
         getTransactionHistory(token, 0, limit)
       ]);
-      
+
       setProfile(profileResponse.data);
       setBalance(balanceResponse.data);
-      
+
       const allRecords = transactionResponse.data.records || [];
       setAllTransactions(allRecords);
-      
+
       // Apply initial filter based on selected month
       const filtered = filterTransactionsByMonth(allRecords, selectedMonth);
       setFilteredTransactions(filtered);
-      
+
       setOffset(limit);
       setHasMore(allRecords.length === limit);
     } catch (err) {
@@ -417,7 +417,7 @@ const TransactionPage = () => {
       navigate('/login');
       return;
     }
-    
+
     fetchInitialData();
   }, [isLoggedIn, token, navigate, fetchInitialData]);
 
@@ -425,18 +425,18 @@ const TransactionPage = () => {
     try {
       setLoadingMore(true);
       setError(null);
-      
+
       const response = await getTransactionHistory(token, offset, limit);
       const newTransactions = response.data.records || [];
-      
+
       // Add new transactions to all transactions
       const updatedAllTransactions = [...allTransactions, ...newTransactions];
       setAllTransactions(updatedAllTransactions);
-      
+
       // Apply current filter to updated transactions
       const filtered = filterTransactionsByMonth(updatedAllTransactions, selectedMonth);
       setFilteredTransactions(filtered);
-      
+
       setOffset(prev => prev + limit);
       setHasMore(newTransactions.length === limit);
     } catch (err) {
@@ -452,12 +452,12 @@ const TransactionPage = () => {
       currency: 'IDR',
       minimumFractionDigits: 0,
     }).format(Math.abs(amount));
-    
+
     // If it's a payment transaction, always show with minus sign
     if (isPayment) {
       return `- ${formatted}`;
     }
-    
+
     // For top up transactions, show with plus sign
     return `+ ${formatted}`;
   };
@@ -476,43 +476,43 @@ const TransactionPage = () => {
     if (transaction.total_amount < 0) {
       return true;
     }
-    
+
     // Check transaction type or description to determine if it's a payment
     const description = transaction.description || transaction.transaction_type || '';
     const serviceCode = transaction.service_code || '';
-    
+
     // List of service codes that are payments (should be red with minus sign)
     const paymentServiceCodes = [
-      'PAJAK', 'PLN', 'PDAM', 'PULSA', 'PGN', 'MUSIK', 'TV', 
+      'PAJAK', 'PLN', 'PDAM', 'PULSA', 'PGN', 'MUSIK', 'TV',
       'PAKET_DATA', 'VOUCHER_GAME', 'VOUCHER_MAKANAN', 'QURBAN', 'ZAKAT'
     ];
-    
+
     // Check if service_code is in payment list
     if (paymentServiceCodes.includes(serviceCode)) {
       return true;
     }
-    
+
     // Check description keywords for payments
     const paymentKeywords = [
       'pulsa', 'listrik', 'pdam', 'bpjs', 'pajak', 'pembayaran', 'bayar',
       'pgn', 'musik', 'tv', 'paket data', 'voucher game', 'voucher makanan',
       'qurban', 'zakat', 'berlangganan'
     ];
-    
-    const isPaymentByDescription = paymentKeywords.some(keyword => 
+
+    const isPaymentByDescription = paymentKeywords.some(keyword =>
       description.toLowerCase().includes(keyword.toLowerCase())
     );
-    
+
     // Only TOPUP service_code or "top up" in description should be green
-    const isTopUp = serviceCode === 'TOPUP' || 
+    const isTopUp = serviceCode === 'TOPUP' ||
                    description.toLowerCase().includes('top up') ||
                    description.toLowerCase().includes('topup');
-    
+
     // If it's explicitly a top up, return false (green)
     if (isTopUp) {
       return false;
     }
-    
+
     // For all other cases, if it matches payment criteria, it's a payment
     return isPaymentByDescription;
   };
@@ -554,9 +554,9 @@ const TransactionPage = () => {
         <UserInfo>
           {profile && (
             <>
-              <img 
-                src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage} 
-                alt="Profile" 
+              <img
+                src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage}
+                alt="Profile"
                 style={{
                   width: '80px',
                   height: '80px',
@@ -577,7 +577,7 @@ const TransactionPage = () => {
             </>
           )}
         </UserInfo>
-        
+
         <BalanceSection>
           <BalanceCard>
             <BalanceCardBackground />
@@ -586,9 +586,9 @@ const TransactionPage = () => {
               {isBalanceVisible ? formatBalance(balance?.balance || 0) : 'Rp ••••••••'}
             </BalanceAmount>
             <ViewBalanceLink onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
-              <Icon 
-                icon="mdi:eye" 
-                width="16" 
+              <Icon
+                icon="mdi:eye"
+                width="16"
                 height="16"
               />
               <span>{isBalanceVisible ? 'Tutup Saldo' : 'Lihat Saldo'}</span>
@@ -599,7 +599,7 @@ const TransactionPage = () => {
 
       <TransactionSection>
         <SectionTitle>Semua Transaksi</SectionTitle>
-        
+
         <MonthFilter>
           {months.map(month => (
             <MonthButton
@@ -622,7 +622,7 @@ const TransactionPage = () => {
               {filteredTransactions.map((transaction, index) => (
                 <TransactionItem key={index}>
                   <TransactionLeft>
-                    <TransactionAmount 
+                    <TransactionAmount
                       className={isPaymentTransaction(transaction) ? 'negative' : 'positive'}
                     >
                       {formatAmount(transaction.total_amount, isPaymentTransaction(transaction))}

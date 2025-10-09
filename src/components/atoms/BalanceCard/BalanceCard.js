@@ -10,7 +10,8 @@ const BalanceCardContainer = styled.div`
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  min-width: 280px;
+  width: 100%;
+  max-width: 100%;
 `;
 
 const BalanceTitle = styled.div`
@@ -37,7 +38,7 @@ const ViewBalanceButton = styled.button`
   align-items: center;
   gap: 8px;
   transition: background-color 0.2s ease;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.3);
   }
@@ -55,14 +56,14 @@ const PatternOverlay = styled.div`
 
 const BalanceCard = ({ balance = 0, onToggleVisibility }) => {
   const [isVisible, setIsVisible] = useState(false);
-  
+
   const handleToggle = () => {
     setIsVisible(!isVisible);
     if (onToggleVisibility) {
       onToggleVisibility(!isVisible);
     }
   };
-  
+
   const formatBalance = (amount) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
@@ -70,7 +71,7 @@ const BalanceCard = ({ balance = 0, onToggleVisibility }) => {
       minimumFractionDigits: 0,
     }).format(amount);
   };
-  
+
   return (
     <BalanceCardContainer>
       <BalanceTitle>Saldo anda</BalanceTitle>
@@ -78,9 +79,9 @@ const BalanceCard = ({ balance = 0, onToggleVisibility }) => {
         {isVisible ? formatBalance(balance) : 'Rp ••••••••'}
       </BalanceAmount>
       <ViewBalanceButton onClick={handleToggle}>
-        <Icon 
-          icon="mdi:eye" 
-          width="16" 
+        <Icon
+          icon="mdi:eye"
+          width="16"
           height="16"
         />
         {isVisible ? 'Sembunyikan' : 'Lihat Saldo'}

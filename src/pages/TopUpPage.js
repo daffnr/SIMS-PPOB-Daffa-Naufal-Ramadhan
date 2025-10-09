@@ -11,11 +11,11 @@ const TopUpContainer = styled.div`
   min-height: 100vh;
   background-color: #f9fafb;
   padding: 24px;
-  
+
   @media (max-width: 768px) {
     padding: 16px;
   }
-  
+
   @media (max-width: 480px) {
     padding: 12px;
   }
@@ -28,7 +28,7 @@ const Header = styled.header`
   margin-bottom: 24px;
   padding: 16px 0;
   border-bottom: 1px solid #e5e7eb;
-  
+
   @media (max-width: 768px) {
     margin-bottom: 20px;
     padding: 12px 0;
@@ -36,7 +36,7 @@ const Header = styled.header`
     gap: 12px;
     align-items: flex-start;
   }
-  
+
   @media (max-width: 480px) {
     margin-bottom: 16px;
     padding: 10px 0;
@@ -47,13 +47,13 @@ const Header = styled.header`
 const Navigation = styled.nav`
   display: flex;
   gap: 32px;
-  
+
   @media (max-width: 768px) {
     gap: 16px;
     width: 100%;
     justify-content: space-between;
   }
-  
+
   @media (max-width: 480px) {
     gap: 12px;
     flex-wrap: wrap;
@@ -66,15 +66,15 @@ const NavLink = styled.a`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  
+
   @media (max-width: 768px) {
     font-size: 14px;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 12px;
   }
-  
+
   &.active {
     color: #dc2626;
   }
@@ -83,12 +83,12 @@ const NavLink = styled.a`
 const MainContent = styled.div`
   display: flex;
   gap: 32px;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 24px;
   }
-  
+
   @media (max-width: 480px) {
     gap: 20px;
   }
@@ -104,11 +104,11 @@ const RightSection = styled.div`
 
 const UserInfo = styled.div`
   margin-bottom: 32px;
-  
+
   @media (max-width: 768px) {
     margin-bottom: 24px;
   }
-  
+
   @media (max-width: 480px) {
     margin-bottom: 20px;
   }
@@ -154,7 +154,7 @@ const ViewBalanceLink = styled.div`
   font-size: 14px;
   cursor: pointer;
   opacity: 0.9;
-  
+
   &:hover {
     opacity: 1;
   }
@@ -202,12 +202,12 @@ const AmountInput = styled.input`
   font-size: 16px;
   color: #1f2937;
   background-color: white;
-  
+
   &:focus {
     outline: none;
     border-color: #dc2626;
   }
-  
+
   &::placeholder {
     color: #9ca3af;
   }
@@ -230,12 +230,12 @@ const QuickAmountButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  
+
   &:hover {
     border-color: #dc2626;
     color: #dc2626;
   }
-  
+
   &.selected {
     border-color: #dc2626;
     background-color: #fef2f2;
@@ -254,7 +254,7 @@ const TopUpButton = styled.button`
   font-weight: 500;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   transition: background-color 0.2s;
-  
+
   &:hover:not(:disabled) {
     background-color: #b91c1c;
   }
@@ -291,17 +291,17 @@ const ModalIcon = styled.div`
   justify-content: center;
   margin: 0 auto 24px;
   font-size: 32px;
-  
+
   &.success {
     background-color: #10b981;
     color: white;
   }
-  
+
   &.error {
     background-color: #dc2626;
     color: white;
   }
-  
+
   &.confirm {
     background-color: #dc2626;
     color: white;
@@ -341,20 +341,20 @@ const ModalButton = styled.button`
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  
+
   &.primary {
     background-color: #dc2626;
     color: white;
-    
+
     &:hover {
       background-color: #b91c1c;
     }
   }
-  
+
   &.secondary {
     background-color: transparent;
     color: #6b7280;
-    
+
     &:hover {
       color: #1f2937;
     }
@@ -369,7 +369,7 @@ const LoadingSpinner = styled.div`
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 40px auto;
-  
+
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -390,19 +390,19 @@ const TopUpPage = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useSelector(state => state.auth);
   const token = user?.token || localStorage.getItem('token');
-  
+
   const [profile, setProfile] = useState(null);
   const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
-  
+
   const [amount, setAmount] = useState('');
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('confirm'); // confirm, success, error
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
   const quickAmounts = [10000, 20000, 50000, 100000, 250000, 500000];
   const minAmount = 10000;
   const maxAmount = 1000000;
@@ -411,12 +411,12 @@ const TopUpPage = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const [profileResponse, balanceResponse] = await Promise.all([
         getProfile(token),
         getBalance(token)
       ]);
-      
+
       setProfile(profileResponse.data);
       setBalance(balanceResponse.data);
     } catch (err) {
@@ -431,7 +431,7 @@ const TopUpPage = () => {
       navigate('/login');
       return;
     }
-    
+
     fetchInitialData();
   }, [isLoggedIn, token, navigate, fetchInitialData]);
 
@@ -453,7 +453,7 @@ const TopUpPage = () => {
 
   const handleTopUpClick = () => {
     if (!isAmountValid()) return;
-    
+
     setModalType('confirm');
     setIsModalOpen(true);
   };
@@ -462,18 +462,18 @@ const TopUpPage = () => {
     try {
       setIsProcessing(true);
       setError(null);
-      
+
       const topUpAmount = parseInt(amount);
       await topUp(token, topUpAmount);
-      
+
       setModalType('success');
       setIsProcessing(false);
-      
+
       // Refresh balance after successful top up
       setTimeout(() => {
         fetchInitialData();
       }, 1000);
-      
+
     } catch (err) {
       setModalType('error');
       setIsProcessing(false);
@@ -527,9 +527,9 @@ const TopUpPage = () => {
           <UserInfo>
             {profile && (
               <>
-                <img 
-                  src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage} 
-                  alt="Profile" 
+                <img
+                  src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage}
+                  alt="Profile"
                   style={{
                     width: '80px',
                     height: '80px',
@@ -554,7 +554,7 @@ const TopUpPage = () => {
           <TopUpSection>
             <SectionTitle>Silahkan masukan</SectionTitle>
             <SectionSubtitle>Nominal Top Up</SectionSubtitle>
-            
+
             <InputContainer>
               <InputIcon>💳</InputIcon>
               <AmountInput
@@ -582,9 +582,9 @@ const TopUpPage = () => {
               {isBalanceVisible ? formatAmount(balance?.balance || 0) : 'Rp ••••••••'}
             </BalanceAmount>
             <ViewBalanceLink onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
-              <Icon 
-                icon="mdi:eye" 
-                width="16" 
+              <Icon
+                icon="mdi:eye"
+                width="16"
                 height="16"
               />
               <span>{isBalanceVisible ? 'Tutup Saldo' : 'Lihat Saldo'}</span>
@@ -615,8 +615,8 @@ const TopUpPage = () => {
                 <ModalMessage>Anda yakin untuk Top Up sebesar</ModalMessage>
                 <ModalAmount>{formatAmount(parseInt(amount))} ?</ModalAmount>
                 <ModalButtons>
-                  <ModalButton 
-                    className="primary" 
+                  <ModalButton
+                    className="primary"
                     onClick={handleConfirmTopUp}
                     disabled={isProcessing}
                   >

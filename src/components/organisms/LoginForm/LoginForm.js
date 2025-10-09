@@ -42,12 +42,12 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLoading, error, user, isLoggedIn } = useSelector((state) => state.auth);
-  
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  
+
   const [errors, setErrors] = useState({});
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -60,19 +60,19 @@ const LoginForm = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Email validation
     if (!formData.email) {
       newErrors.email = 'Email harus diisi';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Format email tidak valid';
     }
-    
+
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password harus diisi';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -82,7 +82,7 @@ const LoginForm = () => {
       ...prev,
       [field]: e.target.value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({
@@ -90,7 +90,7 @@ const LoginForm = () => {
         [field]: ''
       }));
     }
-    
+
     // Clear API error
     if (error) {
       dispatch(clearError());
@@ -99,11 +99,11 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     dispatch(loginUserAsync(formData));
   };
 
@@ -120,19 +120,19 @@ const LoginForm = () => {
     <FormContainer>
       <Logo />
       <LoginPageTitle>Masuk atau buat akun untuk memulai</LoginPageTitle>
-      
+
       {error && (
         <ErrorAlert>
           {typeof error === 'string' ? error : 'Terjadi kesalahan saat login'}
         </ErrorAlert>
       )}
-      
+
       {user && (
         <SuccessAlert>
           Login berhasil! Selamat datang kembali.
         </SuccessAlert>
       )}
-      
+
       <form onSubmit={handleSubmit}>
         <FormField
           type="email"
@@ -142,7 +142,7 @@ const LoginForm = () => {
           onChange={handleInputChange('email')}
           error={errors.email}
         />
-        
+
         <FormField
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="masukan password anda"
@@ -154,16 +154,16 @@ const LoginForm = () => {
           isPasswordVisible={isPasswordVisible}
           onTogglePassword={togglePasswordVisibility}
         />
-        
-        <LoginButton 
-          type="submit" 
+
+        <LoginButton
+          type="submit"
           isLoading={isLoading}
           disabled={isLoading}
         >
           {isLoading ? 'Masuk...' : 'Masuk'}
         </LoginButton>
       </form>
-      
+
       <div style={{ marginTop: '20px', textAlign: 'center' }}>
         <RegisterLink onRegisterClick={handleRegisterClick} />
       </div>

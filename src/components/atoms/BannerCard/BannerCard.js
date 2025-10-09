@@ -9,17 +9,17 @@ const BannerCardContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   @media (max-width: 768px) {
     width: 280px;
     height: 180px;
   }
-  
+
   @media (max-width: 480px) {
     width: 240px;
     height: 160px;
   }
-  
+
   &:hover {
     transform: translateY(-2px);
   }
@@ -36,16 +36,16 @@ const BannerImage = styled.img`
 
 const BannerCard = ({ banner, onClick }) => {
   const { banner_image, alt } = banner;
-  
+
   const handleImageError = (e) => {
     // Fallback jika gambar gagal dimuat
     e.target.style.display = 'none';
   };
-  
+
   return (
     <BannerCardContainer onClick={onClick}>
-      <BannerImage 
-        src={banner_image} 
+      <BannerImage
+        src={banner_image}
         alt={alt || 'Banner'}
         onError={handleImageError}
       />

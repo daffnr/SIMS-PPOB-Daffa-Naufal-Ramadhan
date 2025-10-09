@@ -3,9 +3,15 @@ import styled from 'styled-components';
 import ilustrasiLogin from '../../../assets/images/illustrasiLogin.png';
 
 const PageContainer = styled.div`
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   background-color: #f9fafb;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: 100vh;
+  }
 `;
 
 const LeftSection = styled.div`
@@ -15,6 +21,17 @@ const LeftSection = styled.div`
   justify-content: center;
   padding: 40px;
   background-color: white;
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    padding: 24px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px;
+  }
 `;
 
 const RightSection = styled.div`
@@ -25,6 +42,11 @@ const RightSection = styled.div`
   justify-content: center;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex: 1;
+    min-height: 0;
+  }
 `;
 
 const IllustrationContainer = styled.div`
@@ -39,8 +61,10 @@ const IllustrationContainer = styled.div`
 const IllustrationImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 const RegisterLayout = ({ children }) => {

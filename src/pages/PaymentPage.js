@@ -11,11 +11,11 @@ const PaymentContainer = styled.div`
   min-height: 100vh;
   background-color: #f9fafb;
   padding: 24px;
-  
+
   @media (max-width: 768px) {
     padding: 16px;
   }
-  
+
   @media (max-width: 480px) {
     padding: 12px;
   }
@@ -28,7 +28,7 @@ const Header = styled.div`
   margin-bottom: 24px;
   padding: 16px 0;
   border-bottom: 1px solid #e5e7eb;
-  
+
   @media (max-width: 768px) {
     margin-bottom: 20px;
     padding: 12px 0;
@@ -36,7 +36,7 @@ const Header = styled.div`
     gap: 12px;
     align-items: flex-start;
   }
-  
+
   @media (max-width: 480px) {
     margin-bottom: 16px;
     padding: 10px 0;
@@ -47,13 +47,13 @@ const Header = styled.div`
 const Navigation = styled.div`
   display: flex;
   gap: 32px;
-  
+
   @media (max-width: 768px) {
     gap: 16px;
     width: 100%;
     justify-content: space-between;
   }
-  
+
   @media (max-width: 480px) {
     gap: 12px;
     flex-wrap: wrap;
@@ -67,19 +67,19 @@ const NavLink = styled.a`
   cursor: pointer;
   transition: color 0.2s ease;
   font-size: 16px;
-  
+
   @media (max-width: 768px) {
     font-size: 14px;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 12px;
   }
-  
+
   &:hover {
     color: #dc2626;
   }
-  
+
   &.active {
     color: #dc2626;
   }
@@ -91,12 +91,12 @@ const MainContent = styled.div`
   gap: 32px;
   max-width: 1200px;
   margin: 0 auto;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  
+
   @media (max-width: 480px) {
     gap: 20px;
   }
@@ -106,11 +106,11 @@ const LeftSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  
+
   @media (max-width: 768px) {
     gap: 20px;
   }
-  
+
   @media (max-width: 480px) {
     gap: 16px;
   }
@@ -248,12 +248,12 @@ const PayButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover:not(:disabled) {
     background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
     transform: translateY(-1px);
   }
-  
+
   &:disabled {
     background: #9ca3af;
     cursor: not-allowed;
@@ -311,7 +311,7 @@ const ViewBalanceLink = styled.button`
   align-items: center;
   gap: 8px;
   transition: background-color 0.2s ease;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.3);
   }
@@ -408,20 +408,20 @@ const ModalButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &.primary {
     background: #dc2626;
     color: white;
-    
+
     &:hover {
       background: #b91c1c;
     }
   }
-  
+
   &.secondary {
     background: #f3f4f6;
     color: #6b7280;
-    
+
     &:hover {
       background: #e5e7eb;
     }
@@ -433,19 +433,19 @@ const PaymentPage = () => {
   const location = useLocation();
   const { user, isLoggedIn } = useSelector(state => state.auth);
   const token = user?.token || localStorage.getItem('token');
-  
+
   const [profile, setProfile] = useState(null);
   const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
-  
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('confirm'); // confirm, success, error
   const [modalData, setModalData] = useState(null);
   const [validationError, setValidationError] = useState('');
-  
+
   // Get service data from location state
   const service = location.state?.service;
 
@@ -453,12 +453,12 @@ const PaymentPage = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const [profileResponse, balanceResponse] = await Promise.all([
         getProfile(token),
         getBalance(token)
       ]);
-      
+
       setProfile(profileResponse.data);
       setBalance(balanceResponse.data);
     } catch (err) {
@@ -473,12 +473,12 @@ const PaymentPage = () => {
       navigate('/login');
       return;
     }
-    
+
     if (!service) {
       navigate('/home');
       return;
     }
-    
+
     fetchInitialData();
   }, [isLoggedIn, token, navigate, service, fetchInitialData]);
 
@@ -493,7 +493,7 @@ const PaymentPage = () => {
   const isPaymentValid = () => {
     if (!service) return false;
     if (!balance) return false;
-    
+
     // Check if user has enough balance
     return balance.balance >= service.service_tariff;
   };
@@ -503,7 +503,7 @@ const PaymentPage = () => {
     e.target.style.display = 'none';
     e.target.nextSibling.style.display = 'flex';
   };
-  
+
   // Fallback emoji berdasarkan service code
   const getFallbackEmoji = (code) => {
     const emojiMap = {
@@ -528,7 +528,7 @@ const PaymentPage = () => {
       setValidationError('Saldo tidak mencukupi untuk melakukan pembayaran');
       return;
     }
-    
+
     setValidationError('');
     setModalData({
       serviceName: service.service_name,
@@ -543,13 +543,13 @@ const PaymentPage = () => {
     try {
       setIsProcessing(true);
       setIsModalOpen(false);
-      
+
       const transactionData = {
         service_code: service.service_code
       };
-      
+
       const response = await createTransaction(token, transactionData);
-      
+
       // Show success modal
       setModalData({
         serviceName: service.service_name,
@@ -559,11 +559,11 @@ const PaymentPage = () => {
       });
       setModalType('success');
       setIsModalOpen(true);
-      
+
       // Refresh balance
       const balanceResponse = await getBalance(token);
       setBalance(balanceResponse.data);
-      
+
     } catch (err) {
       // Show error modal
       setModalData({
@@ -615,9 +615,9 @@ const PaymentPage = () => {
         <LeftSection>
           <UserSection>
             <AvatarContainer>
-              <img 
-                src={profile?.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage} 
-                alt="Profile" 
+              <img
+                src={profile?.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage}
+                alt="Profile"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 onError={(e) => {
                   e.target.src = defaultProfileImage;
@@ -632,11 +632,11 @@ const PaymentPage = () => {
 
           <PaymentSection>
             <SectionTitle>PemBayaran</SectionTitle>
-            
+
             <ServiceInfo>
               <ServiceIcon>
-                <ServiceIconImage 
-                  src={service?.service_icon} 
+                <ServiceIconImage
+                  src={service?.service_icon}
                   alt={service?.service_name}
                   onError={handleImageError}
                 />
@@ -658,7 +658,7 @@ const PaymentPage = () => {
               <ValidationError>{validationError}</ValidationError>
             )}
 
-            <PayButton 
+            <PayButton
               onClick={handlePayClick}
               disabled={!isPaymentValid() || isProcessing}
             >
@@ -675,9 +675,9 @@ const PaymentPage = () => {
               {isBalanceVisible ? formatAmount(balance?.balance || 0) : 'Rp ••••••••'}
             </BalanceAmount>
             <ViewBalanceLink onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
-              <Icon 
-                icon="mdi:eye" 
-                width="16" 
+              <Icon
+                icon="mdi:eye"
+                width="16"
                 height="16"
               />
               <span>{isBalanceVisible ? 'Tutup Saldo' : 'Lihat Saldo'}</span>
@@ -693,8 +693,8 @@ const PaymentPage = () => {
             {modalType === 'confirm' && (
               <>
                 <ModalIcon>
-                  <img 
-                    src={modalData?.serviceIcon} 
+                  <img
+                    src={modalData?.serviceIcon}
                     alt={modalData?.serviceName}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                     onError={(e) => {
@@ -721,12 +721,12 @@ const PaymentPage = () => {
                 </ModalButtons>
               </>
             )}
-            
+
             {modalType === 'success' && (
               <>
                 <ModalIcon type="success">
-                  <img 
-                    src={modalData?.serviceIcon} 
+                  <img
+                    src={modalData?.serviceIcon}
                     alt={modalData?.serviceName}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                     onError={(e) => {
@@ -748,12 +748,12 @@ const PaymentPage = () => {
                 </ModalButtons>
               </>
             )}
-            
+
             {modalType === 'error' && (
               <>
                 <ModalIcon type="error">
-                  <img 
-                    src={modalData?.serviceIcon} 
+                  <img
+                    src={modalData?.serviceIcon}
                     alt={modalData?.serviceName}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                     onError={(e) => {

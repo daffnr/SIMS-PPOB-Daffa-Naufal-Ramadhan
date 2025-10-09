@@ -3,12 +3,14 @@ import styled from 'styled-components';
 import ilustrasiLogin from '../../../assets/images/illustrasiLogin.png';
 
 const PageContainer = styled.div`
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   background-color: #f9fafb;
-  
+  overflow: hidden;
+
   @media (max-width: 768px) {
     flex-direction: column;
+    height: 100vh;
   }
 `;
 
@@ -19,15 +21,16 @@ const LeftSection = styled.div`
   justify-content: center;
   padding: 40px;
   background-color: white;
-  
+  overflow-y: auto;
+
   @media (max-width: 768px) {
     padding: 24px;
-    min-height: 60vh;
+    flex: 1;
+    min-height: 0;
   }
-  
+
   @media (max-width: 480px) {
     padding: 20px;
-    min-height: 70vh;
   }
 `;
 
@@ -39,13 +42,10 @@ const RightSection = styled.div`
   justify-content: center;
   position: relative;
   overflow: hidden;
-  
+
   @media (max-width: 768px) {
-    min-height: 40vh;
-  }
-  
-  @media (max-width: 480px) {
-    min-height: 30vh;
+    flex: 1;
+    min-height: 0;
   }
 `;
 
@@ -61,12 +61,10 @@ const IllustrationContainer = styled.div`
 const IllustrationImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
-  
-  @media (max-width: 768px) {
-    object-fit: contain;
-  }
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 const LoginLayout = ({ children }) => {

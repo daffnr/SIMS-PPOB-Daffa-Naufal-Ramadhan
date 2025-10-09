@@ -23,23 +23,23 @@ const IconWrapper = styled.div`
 
 const StyledInput = styled.input`
   width: 100%;
-  height: 56px;
-  padding: 16px 16px 16px 48px;
+  height: 48px;
+  padding: 12px 16px 12px 48px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 15px;
   background-color: white;
   transition: border-color 0.2s ease;
-  
+
   &:focus {
     outline: none;
     border-color: #dc2626;
   }
-  
+
   &::placeholder {
     color: #9ca3af;
   }
-  
+
   ${props => props.hasError && `
     border-color: #ef4444;
   `}
@@ -55,7 +55,7 @@ const PasswordToggle = styled.button`
   font-size: 18px;
   padding: 0;
   z-index: 1;
-  
+
   &:hover {
     color: #374151;
   }
@@ -68,17 +68,17 @@ const ErrorMessage = styled.div`
   margin-left: 4px;
 `;
 
-const Input = ({ 
-  type = 'text', 
-  placeholder, 
-  icon, 
-  value, 
-  onChange, 
+const Input = ({
+  type = 'text',
+  placeholder,
+  icon,
+  value,
+  onChange,
   error,
   showPasswordToggle = false,
   isPasswordVisible = false,
   onTogglePassword,
-  ...props 
+  ...props
 }) => {
   return (
     <InputContainer>
@@ -94,9 +94,9 @@ const Input = ({
         />
         {showPasswordToggle && (
           <PasswordToggle onClick={onTogglePassword} type="button">
-            <Icon 
-              icon={isPasswordVisible ? 'mdi:eye-off' : 'mdi:eye'} 
-              width="20" 
+            <Icon
+              icon={isPasswordVisible ? 'mdi:eye-off' : 'mdi:eye'}
+              width="20"
               height="20"
             />
           </PasswordToggle>

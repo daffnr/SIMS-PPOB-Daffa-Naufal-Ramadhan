@@ -9,19 +9,19 @@ const ServiceCardContainer = styled.div`
   cursor: pointer;
   min-width: 80px;
   padding: 8px;
-  
+
   @media (max-width: 768px) {
     gap: 6px;
     min-width: 70px;
     padding: 6px;
   }
-  
+
   @media (max-width: 480px) {
     gap: 4px;
     min-width: 60px;
     padding: 4px;
   }
-  
+
   &:hover {
     transform: scale(1.05);
     transition: transform 0.2s ease;
@@ -35,12 +35,12 @@ const ServiceIconContainer = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  
+
   @media (max-width: 768px) {
     width: 40px;
     height: 40px;
   }
-  
+
   @media (max-width: 480px) {
     width: 36px;
     height: 36px;
@@ -55,11 +55,11 @@ const ServiceIconImage = styled.img`
 
 const ServiceIconEmoji = styled.div`
   font-size: 24px;
-  
+
   @media (max-width: 768px) {
     font-size: 20px;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 18px;
   }
@@ -71,11 +71,11 @@ const ServiceName = styled.div`
   font-weight: 500;
   text-align: center;
   line-height: 1.2;
-  
+
   @media (max-width: 768px) {
     font-size: 12px;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 10px;
   }
@@ -83,7 +83,7 @@ const ServiceName = styled.div`
 
 const ServiceCard = ({ service, onClick }) => {
   const { service_code, service_name, service_icon } = service;
-  
+
   const handleImageError = (e) => {
     e.target.style.display = 'none';
     e.target.nextSibling.style.display = 'flex';
@@ -105,12 +105,12 @@ const ServiceCard = ({ service, onClick }) => {
     };
     return emojiMap[code] || '📋';
   };
-  
+
   return (
     <ServiceCardContainer onClick={onClick}>
       <ServiceIconContainer>
-        <ServiceIconImage 
-          src={service_icon} 
+        <ServiceIconImage
+          src={service_icon}
           alt={service_name}
           onError={handleImageError}
         />

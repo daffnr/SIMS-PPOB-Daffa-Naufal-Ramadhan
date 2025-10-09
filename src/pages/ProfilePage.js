@@ -11,11 +11,11 @@ const ProfileContainer = styled.div`
   min-height: 100vh;
   background-color: #ffffff;
   padding: 20px;
-  
+
   @media (max-width: 768px) {
     padding: 16px;
   }
-  
+
   @media (max-width: 480px) {
     padding: 12px;
   }
@@ -28,7 +28,7 @@ const Header = styled.header`
   margin-bottom: 24px;
   padding: 16px 20px;
   border-bottom: 1px solid #e5e7eb;
-  
+
   @media (max-width: 768px) {
     margin-bottom: 20px;
     padding: 12px 16px;
@@ -36,7 +36,7 @@ const Header = styled.header`
     gap: 12px;
     align-items: flex-start;
   }
-  
+
   @media (max-width: 480px) {
     margin-bottom: 16px;
     padding: 10px 12px;
@@ -47,13 +47,13 @@ const Header = styled.header`
 const Navigation = styled.nav`
   display: flex;
   gap: 32px;
-  
+
   @media (max-width: 768px) {
     gap: 16px;
     width: 100%;
     justify-content: space-between;
   }
-  
+
   @media (max-width: 480px) {
     gap: 12px;
     flex-wrap: wrap;
@@ -66,15 +66,15 @@ const NavLink = styled.a`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  
+
   @media (max-width: 768px) {
     font-size: 14px;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 12px;
   }
-  
+
   &.active {
     color: #dc2626;
   }
@@ -86,11 +86,11 @@ const ProfileSection = styled.div`
   align-items: center;
   max-width: 400px;
   margin: 0 auto;
-  
+
   @media (max-width: 768px) {
     max-width: 350px;
   }
-  
+
   @media (max-width: 480px) {
     max-width: 300px;
   }
@@ -99,11 +99,11 @@ const ProfileSection = styled.div`
 const ProfileImageContainer = styled.div`
   position: relative;
   margin-bottom: 24px;
-  
+
   @media (max-width: 768px) {
     margin-bottom: 20px;
   }
-  
+
   @media (max-width: 480px) {
     margin-bottom: 16px;
   }
@@ -114,12 +114,12 @@ const ProfileImage = styled.img`
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  
+
   @media (max-width: 768px) {
     width: 100px;
     height: 100px;
   }
-  
+
   @media (max-width: 480px) {
     width: 80px;
     height: 80px;
@@ -194,7 +194,7 @@ const Input = styled.input`
   font-size: 16px;
   color: #1f2937;
   background-color: white;
-  
+
   &:focus {
     outline: none;
     border-color: #dc2626;
@@ -218,7 +218,7 @@ const EditButton = styled.button`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  
+
   &:hover {
     background-color: #b91c1c;
   }
@@ -234,7 +234,7 @@ const LogoutButton = styled.button`
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  
+
   &:hover {
     background-color: #fef2f2;
   }
@@ -259,7 +259,7 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useSelector(state => state.auth);
   const token = user?.token || localStorage.getItem('token');
-  
+
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -293,7 +293,7 @@ const ProfilePage = () => {
       navigate('/login');
       return;
     }
-    
+
     fetchProfile();
   }, [isLoggedIn, token, navigate, fetchProfile]);
 
@@ -391,8 +391,8 @@ const ProfilePage = () => {
 
       <ProfileSection>
         <ProfileImageContainer>
-          <ProfileImage 
-            src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage} 
+          <ProfileImage
+            src={profile.profile_image && profile.profile_image.trim() !== '' ? profile.profile_image : defaultProfileImage}
             alt="Profile"
             onError={(e) => {
               e.target.src = defaultProfileImage;

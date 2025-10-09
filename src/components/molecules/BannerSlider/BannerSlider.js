@@ -4,11 +4,11 @@ import BannerCard from '../../atoms/BannerCard/BannerCard';
 
 const BannerSliderContainer = styled.div`
   margin-top: 32px;
-  
+
   @media (max-width: 768px) {
     margin-top: 24px;
   }
-  
+
   @media (max-width: 480px) {
     margin-top: 20px;
   }
@@ -19,12 +19,12 @@ const BannerTitle = styled.h3`
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 20px;
-  
+
   @media (max-width: 768px) {
     font-size: 18px;
     margin-bottom: 16px;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 16px;
     margin-bottom: 12px;
@@ -35,11 +35,11 @@ const SliderWrapper = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 16px;
-  
+
   @media (max-width: 768px) {
     border-radius: 12px;
   }
-  
+
   @media (max-width: 480px) {
     border-radius: 8px;
   }
@@ -55,13 +55,13 @@ const BannerSlide = styled.div`
   min-width: 320px;
   min-height: 200px;
   margin-right: 12px;
-  
+
   @media (max-width: 768px) {
     min-width: 280px;
     min-height: 180px;
     margin-right: 10px;
   }
-  
+
   @media (max-width: 480px) {
     min-width: 240px;
     min-height: 160px;
@@ -86,11 +86,11 @@ const NavigationButton = styled.button`
   z-index: 10;
   font-size: 18px;
   font-weight: bold;
-  
+
   &:hover {
     background: white;
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -120,7 +120,7 @@ const Dot = styled.button`
   background: ${props => props.active ? '#dc2626' : '#d1d5db'};
   cursor: pointer;
   transition: background-color 0.2s ease;
-  
+
   &:hover {
     background: ${props => props.active ? '#b91c1c' : '#9ca3af'};
   }
@@ -128,7 +128,7 @@ const Dot = styled.button`
 
 const BannerSlider = ({ banners = [], onBannerClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   const nextSlide = useCallback(() => {
     if (currentIndex < 2) {
       setCurrentIndex(prev => prev + 1);
@@ -136,22 +136,22 @@ const BannerSlider = ({ banners = [], onBannerClick }) => {
       setCurrentIndex(0);
     }
   }, [currentIndex]);
-  
+
   const prevSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + 3) % 3);
   }, []);
-  
+
   const goToSlide = (index) => {
     setCurrentIndex(index);
   };
-  
+
   useEffect(() => {
     if (banners.length > 1) {
       const interval = setInterval(nextSlide, 5000);
       return () => clearInterval(interval);
     }
   }, [currentIndex, nextSlide, banners.length]);
-  
+
   if (!banners || banners.length === 0) {
     return (
       <BannerSliderContainer>
@@ -162,7 +162,7 @@ const BannerSlider = ({ banners = [], onBannerClick }) => {
       </BannerSliderContainer>
     );
   }
-  
+
   return (
     <BannerSliderContainer>
       <BannerTitle>Temukan promo menarik</BannerTitle>

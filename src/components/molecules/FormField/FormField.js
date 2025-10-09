@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import Input from '../../atoms/Input/Input';
 
 const FieldContainer = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 `;
 
-const FormField = ({ 
+const FormField = ({
   label,
   type = 'text',
   placeholder,
@@ -17,7 +17,7 @@ const FormField = ({
   showPasswordToggle = false,
   isPasswordVisible = false,
   onTogglePassword,
-  ...props 
+  ...props
 }) => {
   return (
     <FieldContainer>

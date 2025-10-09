@@ -8,21 +8,21 @@ const ServiceGridContainer = styled.div`
   margin-bottom: 32px;
   overflow-x: auto;
   padding-bottom: 8px;
-  
+
   @media (max-width: 768px) {
     gap: 12px;
     margin-bottom: 24px;
   }
-  
+
   @media (max-width: 480px) {
     gap: 8px;
     margin-bottom: 20px;
   }
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
-  
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 `;
@@ -31,9 +31,9 @@ const ServiceGrid = ({ services = [], onServiceClick }) => {
   if (!services || services.length === 0) {
     return (
       <ServiceGridContainer>
-        <div style={{ 
-          textAlign: 'center', 
-          color: '#6b7280', 
+        <div style={{
+          textAlign: 'center',
+          color: '#6b7280',
           padding: '40px',
           width: '100%'
         }}>
@@ -42,7 +42,7 @@ const ServiceGrid = ({ services = [], onServiceClick }) => {
       </ServiceGridContainer>
     );
   }
-  
+
   return (
     <ServiceGridContainer>
       {services.map((service, index) => (

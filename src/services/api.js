@@ -10,7 +10,7 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
 };
 
 export const registerUser = async (userData) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/registration`, {
       method: 'POST',
@@ -38,7 +38,7 @@ export const registerUser = async (userData) => {
 };
 
 export const loginUser = async (userData) => {
-  
+
   try {
     const response = await fetchWithTimeout(`${API_BASE_URL}/login`, {
       method: 'POST',
@@ -68,7 +68,7 @@ export const loginUser = async (userData) => {
 };
 
 export const getProfile = async (token) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/profile`, {
       method: 'GET',
@@ -92,7 +92,7 @@ export const getProfile = async (token) => {
 };
 
 export const getBalance = async (token) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/balance`, {
       method: 'GET',
@@ -116,7 +116,7 @@ export const getBalance = async (token) => {
 };
 
 export const getServices = async (token) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/services`, {
       method: 'GET',
@@ -140,7 +140,7 @@ export const getServices = async (token) => {
 };
 
 export const getBanners = async (token) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/banner`, {
       method: 'GET',
@@ -164,7 +164,7 @@ export const getBanners = async (token) => {
 };
 
 export const updateProfile = async (token, profileData) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/profile/update`, {
       method: 'PUT',
@@ -189,7 +189,7 @@ export const updateProfile = async (token, profileData) => {
 };
 
 export const updateProfileImage = async (token, imageFile) => {
-  
+
   try {
     const formData = new FormData();
     formData.append('file', imageFile);
@@ -216,7 +216,7 @@ export const updateProfileImage = async (token, imageFile) => {
 };
 
 export const getTransactionHistory = async (token, offset = 0, limit = 5) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/transaction/history?offset=${offset}&limit=${limit}`, {
       method: 'GET',
@@ -240,7 +240,7 @@ export const getTransactionHistory = async (token, offset = 0, limit = 5) => {
 };
 
 export const topUp = async (token, topUpAmount) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/topup`, {
       method: 'POST',
@@ -267,7 +267,7 @@ export const topUp = async (token, topUpAmount) => {
 };
 
 export const createTransaction = async (token, transactionData) => {
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/transaction`, {
       method: 'POST',

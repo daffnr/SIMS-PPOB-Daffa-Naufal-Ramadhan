@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Title = styled.h2`
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #1f2937;
-  margin: 0 0 32px 0;
+  margin: 0 0 24px 0;
   line-height: 1.2;
 `;
 

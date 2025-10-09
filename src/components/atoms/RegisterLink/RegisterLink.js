@@ -10,7 +10,7 @@ const Link = styled.span`
   color: #dc2626;
   cursor: pointer;
   font-weight: 500;
-  
+
   &:hover {
     color: #b91c1c;
     text-decoration: underline;

@@ -208,12 +208,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { 
-  clearError, 
-  clearRegistrationStatus, 
-  logout, 
-  clearAuthData, 
-  setTokenValidated, 
-  setAuthLoading 
+export const {
+  clearError,
+  clearRegistrationStatus,
+  logout,
+  clearAuthData,
+  setTokenValidated,
+  setAuthLoading
 } = authSlice.actions;
 export default authSlice.reducer;

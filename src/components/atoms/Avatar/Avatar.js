@@ -5,7 +5,7 @@ import defaultProfileImage from '../../../assets/images/profilePhoto.png';
 const AvatarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
 `;
 
@@ -36,32 +36,32 @@ const ProfileImage = styled.img`
 const WelcomeText = styled.div`
   color: #6b7280;
   font-size: 16px;
-  text-align: center;
+  text-align: left;
 `;
 
 const UserName = styled.div`
   color: #1f2937;
   font-size: 20px;
   font-weight: 700;
-  text-align: center;
+  text-align: left;
 `;
 
 const Avatar = ({ profile }) => {
   const { first_name = "", last_name = "", profile_image = "" } = profile || {};
-  
+
   const fullName = `${first_name} ${last_name}`.trim() || "User";
-  
+
   const handleImageError = (e) => {
     e.target.src = defaultProfileImage;
   };
-  
+
   const displayImage = profile_image && profile_image.trim() !== '' ? profile_image : defaultProfileImage;
-  
+
   return (
     <AvatarContainer>
       <AvatarImageContainer>
-        <ProfileImage 
-          src={displayImage} 
+        <ProfileImage
+          src={displayImage}
           alt={fullName}
           onError={handleImageError}
         />
