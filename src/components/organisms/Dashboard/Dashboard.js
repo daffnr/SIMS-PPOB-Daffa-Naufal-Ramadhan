@@ -107,19 +107,22 @@ const UserSection = styled.div`
 `;
 
 const UserInfo = styled.div`
-  flex: 0 0 40%;
+  flex: 1;
 `;
 
 const BalanceSection = styled.div`
-  flex: 0 0 60%;
+  flex: 1;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
 
   @media (max-width: 768px) {
-    flex: 1;
     justify-content: center;
     width: 100%;
   }
+`;
+
+const MainContent = styled.div`
+  width: 100%;
 `;
 
 const LoadingSpinner = styled.div`
@@ -214,15 +217,17 @@ const Dashboard = () => {
         </BalanceSection>
       </UserSection>
 
-      <ServiceGrid
-        services={services}
-        onServiceClick={handleServiceClick}
-      />
+      <MainContent>
+        <ServiceGrid
+          services={services}
+          onServiceClick={handleServiceClick}
+        />
 
-      <BannerSlider
-        banners={banners}
-        onBannerClick={handleBannerClick}
-      />
+        <BannerSlider
+          banners={banners}
+          onBannerClick={handleBannerClick}
+        />
+      </MainContent>
     </DashboardContainer>
   );
 };

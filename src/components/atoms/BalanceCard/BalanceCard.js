@@ -10,8 +10,12 @@ const BalanceCardContainer = styled.div`
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 100%;
+  min-width: 600px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    min-width: auto;
+  }
 `;
 
 const BalanceTitle = styled.div`

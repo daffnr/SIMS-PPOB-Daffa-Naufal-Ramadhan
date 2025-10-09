@@ -3,28 +3,38 @@ import styled from 'styled-components';
 import ServiceCard from '../../atoms/ServiceCard/ServiceCard';
 
 const ServiceGridContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
-  overflow-x: auto;
-  padding-bottom: 8px;
+  padding: 0;
 
   @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
     gap: 12px;
     margin-bottom: 24px;
   }
 
   @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
     gap: 8px;
     margin-bottom: 20px;
   }
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  /* Fallback untuk browser yang tidak support CSS Grid */
+  @supports not (display: grid) {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    padding-bottom: 8px;
 
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 `;
 
 const ServiceGrid = ({ services = [], onServiceClick }) => {

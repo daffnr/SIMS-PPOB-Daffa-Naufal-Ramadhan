@@ -4,6 +4,7 @@ import BannerCard from '../../atoms/BannerCard/BannerCard';
 
 const BannerSliderContainer = styled.div`
   margin-top: 32px;
+  width: 100%;
 
   @media (max-width: 768px) {
     margin-top: 24px;
@@ -35,6 +36,7 @@ const SliderWrapper = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 16px;
+  width: 100%;
 
   @media (max-width: 768px) {
     border-radius: 12px;
@@ -54,18 +56,19 @@ const SliderTrack = styled.div`
 const BannerSlide = styled.div`
   min-width: 320px;
   min-height: 200px;
-  margin-right: 12px;
+  margin-right: 16px;
+  flex-shrink: 0;
 
   @media (max-width: 768px) {
     min-width: 280px;
     min-height: 180px;
-    margin-right: 10px;
+    margin-right: 12px;
   }
 
   @media (max-width: 480px) {
     min-width: 240px;
     min-height: 160px;
-    margin-right: 8px;
+    margin-right: 10px;
   }
 `;
 
@@ -177,7 +180,7 @@ const BannerSlider = ({ banners = [], onBannerClick }) => {
             </NextButton>
           </>
         )}
-        <SliderTrack translateX={-currentIndex * (window.innerWidth <= 480 ? 248 : window.innerWidth <= 768 ? 290 : 336)}>
+        <SliderTrack translateX={-currentIndex * (window.innerWidth <= 480 ? 250 : window.innerWidth <= 768 ? 292 : 336)}>
           {banners.map((banner, index) => (
             <BannerSlide key={index}>
               <BannerCard
